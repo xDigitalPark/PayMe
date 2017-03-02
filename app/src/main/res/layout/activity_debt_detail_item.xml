@@ -5,7 +5,7 @@
     android:clickable="true"
     android:focusable="true"
     android:background="?android:attr/selectableItemBackground"
-    android:padding="5dp">
+    android:padding="@dimen/debt_item_padding">
 
 
     <TextView
@@ -14,6 +14,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/activity_debt_detail_item_concept_edittext"
+        android:textSize="@dimen/debt_text_size"
+        android:fontFamily="sans-serif-medium"
         android:textColor="#010101"
         android:layout_alignTop="@+id/activity_debt_detail_item_total_edittext"
  />
@@ -25,6 +27,9 @@
         android:text="Medium Text"
         android:id="@+id/activity_debt_detail_item_total_edittext"
         android:layout_gravity="right"
+        android:textSize="@dimen/debt_text_size"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="bold"
         android:textColor="#000000"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
@@ -34,7 +39,9 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="19 ENE 17"
-        android:id="@+id/textView"
+        android:textSize="@dimen/debt_date_text_size"
+        android:fontFamily="sans-serif-medium"
+        android:id="@+id/activity_debt_detail_item_date_text"
         android:layout_below="@+id/activity_debt_detail_item_concept_edittext"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />

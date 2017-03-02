@@ -11,6 +11,7 @@ public class DetailViewHolder extends RecyclerView.ViewHolder implements View.On
 {
     public TextView conceptEditText;
     public TextView totalEditText;
+    public TextView dateTextView;
     public View view;
 
     public DetailViewHolder(View view) {
@@ -18,6 +19,7 @@ public class DetailViewHolder extends RecyclerView.ViewHolder implements View.On
         this.view = view;
         this.conceptEditText = (TextView) view.findViewById(R.id.activity_debt_detail_item_concept_edittext);
         this.totalEditText = (TextView) view.findViewById(R.id.activity_debt_detail_item_total_edittext);
+        this.dateTextView = (TextView) view.findViewById(R.id.activity_debt_detail_item_date_text);
         this.view.setOnCreateContextMenuListener(this);
     }
 

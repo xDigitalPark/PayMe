@@ -21,6 +21,7 @@ import payme.apps.seven.org.payme.create.ui.CreateDebtActivity;
 import payme.apps.seven.org.payme.detail.DebtDetailPresenter;
 import payme.apps.seven.org.payme.detail.DebtDetailPresenterImpl;
 import payme.apps.seven.org.payme.detail.adapters.DebtDetailActivityAdapter;
+import payme.apps.seven.org.payme.list.DividerItemDecorator;
 import payme.apps.seven.org.payme.model.Debt;
 import payme.apps.seven.org.payme.model.DebtHeader;
 
@@ -49,6 +50,7 @@ public class DebtDetailActivity extends AppCompatActivity implements DebtDetailV
         prepopActivity(extras);
         this.adapter = new DebtDetailActivityAdapter(this.debtList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.addItemDecoration(new DividerItemDecorator(this, DividerItemDecorator.VERTICAL_LIST));
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

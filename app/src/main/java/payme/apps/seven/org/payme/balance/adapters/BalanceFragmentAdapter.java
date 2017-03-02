@@ -31,6 +31,8 @@ public class BalanceFragmentAdapter extends RecyclerView.Adapter<BalanceViewHold
         final Balance balance = this.balanceList.get(position);
         holder.nameEditText.setText(balance.getName());
         holder.totalEditText.setText(balance.getCurrency() + " " + balance.getTotal());
+        holder.myTotalText.setText(balance.getCurrency() + " " + balance.getPartyTotal());
+        holder.partyTotalText.setText("   -   " + balance.getCurrency() + " " + balance.getMyTotal());
         if (balance.getTotal() < 0) {
             holder.totalEditText.setTextColor(holder.view.getResources().getColor(R.color.negativeDebt));
         } else {

@@ -15,6 +15,8 @@ public class BalanceViewHolder extends RecyclerView.ViewHolder
 
     public TextView nameEditText;
     public TextView totalEditText;
+    public TextView myTotalText;
+    public TextView partyTotalText;
     public View view;
 
     public BalanceViewHolder(View view) {
@@ -22,6 +24,8 @@ public class BalanceViewHolder extends RecyclerView.ViewHolder
         this.view = view;
         this.nameEditText = (TextView) view.findViewById(R.id.fragment_balance_item_name_edittext);
         this.totalEditText = (TextView) view.findViewById(R.id.fragment_balance_item_total_edittext);
+        this.myTotalText = (TextView) view.findViewById(R.id.fragment_balance_mytotal_edittext);
+        this.partyTotalText = (TextView) view.findViewById(R.id.fragment_balance_party_total_edittext);
         this.view.setOnCreateContextMenuListener(this);
     }
 

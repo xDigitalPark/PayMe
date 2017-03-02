@@ -43,6 +43,7 @@
         android:textColor="@color/negativeDebt"
         android:textSize="@dimen/debt_text_size"
         android:fontFamily="sans-serif-medium"
+        android:textStyle="bold"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 

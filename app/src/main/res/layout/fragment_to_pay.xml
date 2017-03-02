@@ -33,8 +33,9 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="#deeaf2"
+        android:background="@color/listBackground"
         android:id="@+id/fragment_to_pay_detail"
+        android:padding="@dimen/debt_item_padding"
         android:layout_gravity="center_horizontal|bottom">
 
         <TextView

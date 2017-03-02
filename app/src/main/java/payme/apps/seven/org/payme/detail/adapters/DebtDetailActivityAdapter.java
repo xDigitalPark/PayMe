@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import payme.apps.seven.org.payme.R;
@@ -31,6 +33,12 @@ public class DebtDetailActivityAdapter extends RecyclerView.Adapter<DetailViewHo
         final Debt debt = this.debtList.get(position);
         holder.conceptEditText.setText(debt.getConcept());
         holder.totalEditText.setText(debt.getCurrency() + " " + debt.getTotal());
+        holder.dateTextView.setText(formatDate(debt.getDate()));
+        if (debt.isMine()) {
+            holder.totalEditText.setTextColor(holder.view.getResources().getColor(R.color.negativeDebt));
+        } else {
+            holder.totalEditText.setTextColor(holder.view.getResources().getColor(R.color.positiveDebt));
+        }
         holder.view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -70,6 +78,13 @@ public class DebtDetailActivityAdapter extends RecyclerView.Adapter<DetailViewHo
             total += debt.getTotal();
         }
         return total;
+    }
+
+    private String formatDate(Long millis) {
+        Date date=new Date(millis);
+        SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yy");
+        String dateText = df2.format(date);
+        return dateText;
     }
 
 }
