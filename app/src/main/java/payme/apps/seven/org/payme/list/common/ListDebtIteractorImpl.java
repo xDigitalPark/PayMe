@@ -23,6 +23,6 @@ public class ListDebtIteractorImpl implements ListDebtIteractor {
 
     @Override
     public void doDeleteDebtHeader(DebtHeader debtHeader) {
-        debtRepository.deleteDebtHeader(debtHeader, true);
+        debtRepository.deleteDebtHeader(debtHeader, true, true);
     }
 }

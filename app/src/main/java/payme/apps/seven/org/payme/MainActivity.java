@@ -1,6 +1,7 @@
 package payme.apps.seven.org.payme;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import payme.apps.seven.org.payme.balance.listeners.OnTabSelectedListener;
 import payme.apps.seven.org.payme.create.ui.CreateDebtActivity;
 import payme.apps.seven.org.payme.balance.ui.BalanceFragment;
 import payme.apps.seven.org.payme.list.tocharge.ToChargeFragment;
@@ -49,7 +51,16 @@ public class MainActivity extends AppCompatActivity {
                 mine = tab.getPosition() == 1;
                 if (tab.getPosition() == 2) {
                     hideFloatingButton(true);
+                    OnTabSelectedListener fragment = (OnTabSelectedListener) mSectionsPagerAdapter.instantiateItem(mViewPager, tab.getPosition());
+                    if (fragment != null)
+                        fragment.onResumeFragment();
                 } else {
+                    if (tab.getPosition() == 1) {
+                        OnTabSelectedListener fragment = (OnTabSelectedListener) mSectionsPagerAdapter.instantiateItem(mViewPager, tab.getPosition());
+                        if (fragment != null)
+                            fragment.onResumeFragment();
+                    }
+
                     hideFloatingButton(false);
                 }
             }
@@ -87,8 +98,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+//        if (id == R.id.action_settings) {
+//            return true;
+//        } else
+        if(id == R.id.action_about_app) {
+            Snackbar.make(mViewPager, "Coded by Erikson Murrugarra. DigitalPark, PE", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
         }
         return super.onOptionsItemSelected(item);
     }

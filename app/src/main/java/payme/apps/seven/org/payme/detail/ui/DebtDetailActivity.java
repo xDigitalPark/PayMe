@@ -1,12 +1,18 @@
 package payme.apps.seven.org.payme.detail.ui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -65,6 +71,13 @@ public class DebtDetailActivity extends AppCompatActivity implements DebtDetailV
 
         this.presenter = new DebtDetailPresenterImpl(this);
         this.presenter.onCreate();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_debt_detail, menu);
+        return true;
     }
 
     @Override
@@ -127,6 +140,13 @@ public class DebtDetailActivity extends AppCompatActivity implements DebtDetailV
         return super.onContextItemSelected(item);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_debt_detail_call) {
+            callToNumber(this.debt.getNumber());
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onCloseDebtOptionSelected(Debt debt) {
@@ -155,5 +175,15 @@ public class DebtDetailActivity extends AppCompatActivity implements DebtDetailV
     @Override
     public void onDebtHeaderDeleted() {
         finish();
+    }
+
+    @Override
+    public void callToNumber(String number) {
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:"+number));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        startActivity(callIntent);
     }
 }

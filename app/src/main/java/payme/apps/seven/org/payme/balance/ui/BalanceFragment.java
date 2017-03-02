@@ -20,10 +20,11 @@ import payme.apps.seven.org.payme.R;
 import payme.apps.seven.org.payme.balance.BalancePresenter;
 import payme.apps.seven.org.payme.balance.BalancePresenterImpl;
 import payme.apps.seven.org.payme.balance.adapters.BalanceFragmentAdapter;
+import payme.apps.seven.org.payme.balance.listeners.OnTabSelectedListener;
 import payme.apps.seven.org.payme.list.DividerItemDecorator;
 import payme.apps.seven.org.payme.model.Balance;
 
-public class BalanceFragment extends Fragment implements BalanceView {
+public class BalanceFragment extends Fragment implements BalanceView, OnTabSelectedListener {
 
     @BindView(R.id.fragment_balance_recyclerview)
     RecyclerView recyclerView;
@@ -53,6 +54,7 @@ public class BalanceFragment extends Fragment implements BalanceView {
         presenter.onCreate();
         super.onActivityCreated(savedInstanceState);
     }
+
 
     @Override
     public void onStart() {
@@ -91,6 +93,11 @@ public class BalanceFragment extends Fragment implements BalanceView {
 
     @Override
     public void onBalanceArchived(Balance balance) {
+        presenter.sendRetrieveBalancesAction();
+    }
+
+    @Override
+    public void onResumeFragment() {
         presenter.sendRetrieveBalancesAction();
     }
 }

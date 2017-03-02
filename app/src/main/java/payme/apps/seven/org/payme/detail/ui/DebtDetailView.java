@@ -20,4 +20,5 @@ public interface DebtDetailView {
     void onDeleteDebtOptionSelected(Debt debt);
     void onDebtDeleted(Long id);
     void onDebtHeaderDeleted();
+    void callToNumber(String number);
 }

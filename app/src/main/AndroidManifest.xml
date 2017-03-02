@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="payme.apps.seven.org.payme">
     <!--services-->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <application
         android:name=".PaymeApplication"
@@ -23,6 +24,7 @@
         </activity>
         <activity
             android:name=".detail.ui.DebtDetailActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".create.ui.CreateDebtActivity"
             android:screenOrientation="portrait"

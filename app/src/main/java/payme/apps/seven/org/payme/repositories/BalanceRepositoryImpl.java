@@ -11,15 +11,20 @@ import payme.apps.seven.org.payme.model.Balance;
 import payme.apps.seven.org.payme.events.BalanceEvent;
 import payme.apps.seven.org.payme.lib.events.EventBus;
 import payme.apps.seven.org.payme.lib.events.GreenRobotEventBus;
+import payme.apps.seven.org.payme.model.DebtHeader;
 
 public class BalanceRepositoryImpl implements  BalanceRepository {
 
     private EventBus eventBus;
     private DatabaseAdapter database;
+    private DebtRepository debtRepository;
+    private DebtLookupRepository lookupRepository;
 
     public BalanceRepositoryImpl() {
         this.eventBus = GreenRobotEventBus.getInstance();
         this.database = PaymeApplication.getDatabaseInstance();
+        this.debtRepository = new DebtRepositoryImpl();
+        this.lookupRepository = new DebtLookupRepositoryImpl();
     }
 
     @Override
@@ -60,6 +65,15 @@ public class BalanceRepositoryImpl implements  BalanceRepository {
 
     @Override
     public void deleteBalance(Balance balance) {
+
+        DebtHeader debtHeaderToCharge = lookupRepository.lookupDebtHeader(balance.getNumber(), false);
+        if (debtHeaderToCharge != null) {
+            debtRepository.deleteDebtHeader(debtHeaderToCharge, true, false);
+        }
+        DebtHeader debtHeaderToPay = lookupRepository.lookupDebtHeader(balance.getNumber(), true);
+        if (debtHeaderToPay != null) {
+            debtRepository.deleteDebtHeader(debtHeaderToPay, true, false);
+        }
         boolean deleted = this.database.deleteData(DatabaseAdapter.BALANCE_TABLE, "number = ?", balance.getNumber());
         if (deleted) {
             BalanceEvent event = new BalanceEvent();

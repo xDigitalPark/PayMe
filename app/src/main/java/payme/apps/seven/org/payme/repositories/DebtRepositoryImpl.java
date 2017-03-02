@@ -26,7 +26,7 @@ public class DebtRepositoryImpl implements DebtRepository {
     }
 
     @Override
-    public void deleteDebtHeader(DebtHeader debtHeader, boolean removeChilds) {
+    public void deleteDebtHeader(DebtHeader debtHeader, boolean removeChilds, boolean pushEvent) {
         String table = !debtHeader.isMine()?DatabaseAdapter.DEBT_HEADER_TABLE_TOCHARGE:DatabaseAdapter.DEBT_HEADER_TABLE_TOPAY;
         boolean debtHeaderDeleted = this.database.deleteData(table, "number = ?", debtHeader.getNumber()),
             childsDeleted = true,
@@ -38,11 +38,11 @@ public class DebtRepositoryImpl implements DebtRepository {
             int count = database.countData(debtTable, "number = '" + debtHeader.getNumber() + "'");
             childsDeleted = (count == 0);
             if (childsDeleted) {
-                balanceUpdated = updateBalanceInDeleteDebtHeaderAction(debtHeader);
+                balanceUpdated = updateBalanceInDeleteDebtHeaderAction(debtHeader, pushEvent);
             }
         }
 
-        if (removeChilds == false && debtHeaderDeleted == true) {
+        if (removeChilds == false && debtHeaderDeleted == true && pushEvent == true) {
             DebtDetailEvent event = new DebtDetailEvent();
             event.setStatus(DebtDetailEvent.DEBT_HEADER_DELETED_OK);
             event.setMessage("OK");
@@ -50,7 +50,7 @@ public class DebtRepositoryImpl implements DebtRepository {
             return;
         }
 
-        if (debtHeaderDeleted && childsDeleted && balanceUpdated) {
+        if (debtHeaderDeleted && childsDeleted && balanceUpdated && pushEvent == true) {
             if (!debtHeader.isMine()) {
                 ToChargeDebtListEvent event = new ToChargeDebtListEvent();
                 event.setStatus(ToChargeDebtListEvent.DEBT_HEADER_DELETED_OK);
@@ -66,7 +66,7 @@ public class DebtRepositoryImpl implements DebtRepository {
         }
     }
 
-    private boolean updateBalanceInDeleteDebtHeaderAction(DebtHeader debtHeader) {
+    private boolean updateBalanceInDeleteDebtHeaderAction(DebtHeader debtHeader, boolean pushEvent) {
         Balance balance = lookupRepository.lookupBalance(debtHeader.getNumber());
         if (!debtHeader.isMine()) {
             balance.setPartyTotal(balance.getPartyTotal() - debtHeader.getTotal());
@@ -81,8 +81,11 @@ public class DebtRepositoryImpl implements DebtRepository {
             data.put(DatabaseAdapter.BALANCE_TABLE_COL_TOTAL, balance.getTotal());
             return database.updateData(DatabaseAdapter.BALANCE_TABLE, data, "number = ?", debtHeader.getNumber());
         } else {
-            return database.deleteData(DatabaseAdapter.BALANCE_TABLE, "number = ?", debtHeader.getNumber());
+            if (pushEvent == true) {
+                return database.deleteData(DatabaseAdapter.BALANCE_TABLE, "number = ?", debtHeader.getNumber());
+            }
         }
+        return true;
     }
 
 

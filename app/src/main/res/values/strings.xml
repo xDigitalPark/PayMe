@@ -31,4 +31,5 @@
     <string name="month_october">OCT</string>
     <string name="month_november">NOV</string>
     <string name="month_december">DIC</string>
+    <string name="action_about">About</string>
 </resources>

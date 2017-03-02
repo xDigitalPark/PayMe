@@ -17,6 +17,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import payme.apps.seven.org.payme.R;
+import payme.apps.seven.org.payme.balance.listeners.OnTabSelectedListener;
 import payme.apps.seven.org.payme.detail.ui.DebtDetailActivity;
 import payme.apps.seven.org.payme.list.DividerItemDecorator;
 import payme.apps.seven.org.payme.list.adapters.ToPayFragmentAdapter;
@@ -25,7 +26,7 @@ import payme.apps.seven.org.payme.list.common.ui.OnClickDebtHeaderListener;
 import payme.apps.seven.org.payme.list.common.ui.ListDebtView;
 import payme.apps.seven.org.payme.model.DebtHeader;
 
-public class ToPayFragment extends Fragment implements ListDebtView, OnClickDebtHeaderListener {
+public class ToPayFragment extends Fragment implements ListDebtView, OnClickDebtHeaderListener, OnTabSelectedListener {
     @BindView(R.id.fragment_to_pay_total)
     TextView fragmentToPayTotal;
     private List<DebtHeader> debtHeaderList;
@@ -101,6 +102,11 @@ public class ToPayFragment extends Fragment implements ListDebtView, OnClickDebt
 
     @Override
     public void onHeaderDeleted() {
+        presenter.sendRetrieveDebtHeadersAction(true);
+    }
+
+    @Override
+    public void onResumeFragment() {
         presenter.sendRetrieveDebtHeadersAction(true);
     }
 }
