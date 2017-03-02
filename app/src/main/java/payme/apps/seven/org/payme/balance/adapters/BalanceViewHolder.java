@@ -9,7 +9,9 @@ import payme.apps.seven.org.payme.R;
 import payme.apps.seven.org.payme.balance.ui.BalanceView;
 import payme.apps.seven.org.payme.detail.ui.DebtDetailView;
 
-public class BalanceViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+public class BalanceViewHolder extends RecyclerView.ViewHolder
+        implements View.OnCreateContextMenuListener
+{
 
     public TextView nameEditText;
     public TextView totalEditText;
@@ -26,6 +28,5 @@ public class BalanceViewHolder extends RecyclerView.ViewHolder implements View.O
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
         menu.add(0, BalanceView.CLOSE_DEBT, 0, R.string.action_archive_debt_title);
-
     }
 }

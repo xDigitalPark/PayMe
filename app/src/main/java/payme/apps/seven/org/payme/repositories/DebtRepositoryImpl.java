@@ -1,5 +1,7 @@
 package payme.apps.seven.org.payme.repositories;
 
+import android.content.ContentValues;
+
 import payme.apps.seven.org.payme.PaymeApplication;
 import payme.apps.seven.org.payme.events.DebtDetailEvent;
 import payme.apps.seven.org.payme.events.ToChargeDebtListEvent;
@@ -7,6 +9,7 @@ import payme.apps.seven.org.payme.events.ToPayDebtListEvent;
 import payme.apps.seven.org.payme.lib.data.DatabaseAdapter;
 import payme.apps.seven.org.payme.lib.events.EventBus;
 import payme.apps.seven.org.payme.lib.events.GreenRobotEventBus;
+import payme.apps.seven.org.payme.model.Balance;
 import payme.apps.seven.org.payme.model.Debt;
 import payme.apps.seven.org.payme.model.DebtHeader;
 
@@ -14,10 +17,12 @@ public class DebtRepositoryImpl implements DebtRepository {
 
     private DatabaseAdapter database;
     private EventBus eventBus;
+    private DebtLookupRepository lookupRepository;
 
     public DebtRepositoryImpl() {
         this.database = PaymeApplication.getDatabaseInstance();
         this.eventBus = GreenRobotEventBus.getInstance();
+        this.lookupRepository = new DebtLookupRepositoryImpl();
     }
 
     @Override
@@ -33,7 +38,7 @@ public class DebtRepositoryImpl implements DebtRepository {
             int count = database.countData(debtTable, "number = '" + debtHeader.getNumber() + "'");
             childsDeleted = (count == 0);
             if (childsDeleted) {
-
+                balanceUpdated = updateBalanceInDeleteDebtHeaderAction(debtHeader);
             }
         }
 
@@ -61,8 +66,23 @@ public class DebtRepositoryImpl implements DebtRepository {
         }
     }
 
-    private boolean updateBalanceInDeleteDebtHeaderAction() {
-        return true;
+    private boolean updateBalanceInDeleteDebtHeaderAction(DebtHeader debtHeader) {
+        Balance balance = lookupRepository.lookupBalance(debtHeader.getNumber());
+        if (!debtHeader.isMine()) {
+            balance.setPartyTotal(balance.getPartyTotal() - debtHeader.getTotal());
+        } else {
+            balance.setMyTotal(balance.getMyTotal() - debtHeader.getTotal());
+        }
+        balance.setTotal(balance.getMyTotal() - balance.getPartyTotal());
+        if (balance.getTotal() > 0) {
+            ContentValues data = new ContentValues();
+            data.put(DatabaseAdapter.BALANCE_TABLE_COL_MY_TOTAL, balance.getMyTotal());
+            data.put(DatabaseAdapter.BALANCE_TABLE_COL_PARTY_TOTAL, balance.getPartyTotal());
+            data.put(DatabaseAdapter.BALANCE_TABLE_COL_TOTAL, balance.getTotal());
+            return database.updateData(DatabaseAdapter.BALANCE_TABLE, data, "number = ?", debtHeader.getNumber());
+        } else {
+            return database.deleteData(DatabaseAdapter.BALANCE_TABLE, "number = ?", debtHeader.getNumber());
+        }
     }
 
 
