@@ -73,8 +73,8 @@ public class DebtRepositoryImpl implements DebtRepository {
         } else {
             balance.setMyTotal(balance.getMyTotal() - debtHeader.getTotal());
         }
-        balance.setTotal(balance.getMyTotal() - balance.getPartyTotal());
-        if (balance.getTotal() > 0) {
+        balance.setTotal(balance.getPartyTotal()- balance.getMyTotal());
+        if (balance.getTotal() != 0D) {
             ContentValues data = new ContentValues();
             data.put(DatabaseAdapter.BALANCE_TABLE_COL_MY_TOTAL, balance.getMyTotal());
             data.put(DatabaseAdapter.BALANCE_TABLE_COL_PARTY_TOTAL, balance.getPartyTotal());
