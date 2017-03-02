@@ -1,0 +1,2 @@
+DPPM-001: The Balance is updated when a DebtHeader is closed.
+DPPM-002: The user is able to Close a Balance and remove the ToCharge/ToPay(Headers and Childs) if exists.
