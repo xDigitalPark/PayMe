@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="payme.apps.seven.org.payme.debtHeader.list.ToPayFragment">
+    android:background="@color/listBackground">
 
 <RelativeLayout
     android:layout_width="match_parent"

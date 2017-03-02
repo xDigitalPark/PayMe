@@ -18,6 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import payme.apps.seven.org.payme.R;
 import payme.apps.seven.org.payme.detail.ui.DebtDetailActivity;
+import payme.apps.seven.org.payme.list.DividerItemDecorator;
 import payme.apps.seven.org.payme.list.adapters.ToPayFragmentAdapter;
 import payme.apps.seven.org.payme.list.common.ListDebtPresenter;
 import payme.apps.seven.org.payme.list.common.ui.OnClickDebtHeaderListener;
@@ -42,6 +43,7 @@ public class ToPayFragment extends Fragment implements ListDebtView, OnClickDebt
         this.adapter = new ToPayFragmentAdapter(this.debtHeaderList, this);
         this.presenter = new ToPayDebtPresenterImpl(this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.addItemDecoration(new DividerItemDecorator(getActivity(), DividerItemDecorator.VERTICAL_LIST));
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         return view;

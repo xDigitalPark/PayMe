@@ -10,7 +10,6 @@ import java.util.List;
 
 import payme.apps.seven.org.payme.R;
 import payme.apps.seven.org.payme.model.Balance;
-import payme.apps.seven.org.payme.model.Debt;
 
 public class BalanceFragmentAdapter extends RecyclerView.Adapter<BalanceViewHolder> {
 
@@ -29,13 +28,18 @@ public class BalanceFragmentAdapter extends RecyclerView.Adapter<BalanceViewHold
 
     @Override
     public void onBindViewHolder(BalanceViewHolder holder, int position) {
-        final Balance debt = this.balanceList.get(position);
-        holder.nameEditText.setText(debt.getName());
-        holder.totalEditText.setText(debt.getCurrency() + " " + debt.getTotal());
+        final Balance balance = this.balanceList.get(position);
+        holder.nameEditText.setText(balance.getName());
+        holder.totalEditText.setText(balance.getCurrency() + " " + balance.getTotal());
+        if (balance.getTotal() < 0) {
+            holder.totalEditText.setTextColor(holder.view.getResources().getColor(R.color.negativeDebt));
+        } else {
+            holder.totalEditText.setTextColor(holder.view.getResources().getColor(R.color.positiveDebt));
+        }
         holder.view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                selectedBalance = debt;
+                selectedBalance = balance;
                 return false;
             }
         });

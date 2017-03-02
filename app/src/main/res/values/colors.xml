@@ -2,5 +2,9 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <!--<color name="colorAccent">#FF4081</color>-->
+    <color name="colorAccent">#FFC300</color>
+    <color name="positiveDebt">#1C8360</color>
+    <color name="negativeDebt">#F01E65</color>
+    <color name="listBackground">#FCFAEA</color>
 </resources>

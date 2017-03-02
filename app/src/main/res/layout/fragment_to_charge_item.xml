@@ -2,7 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp">
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?android:attr/selectableItemBackground"
+    android:padding="@dimen/debt_item_padding">
 
 <!--
     <de.hdodenhof.circleimageview.CircleImageView
@@ -21,21 +24,23 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/fragment_to_charge_item_name_edittext"
         android:textColor="#010101"
+        android:textSize="@dimen/debt_text_size"
+        android:fontFamily="sans-serif-medium"
         android:layout_alignTop="@+id/fragment_to_charge_item_total_edittext"
  />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/fragment_to_charge_item_total_edittext"
         android:layout_gravity="right"
-        android:textColor="#000000"
+        android:textColor="@color/positiveDebt"
+        android:textSize="@dimen/debt_text_size"
+        android:fontFamily="sans-serif-medium"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 

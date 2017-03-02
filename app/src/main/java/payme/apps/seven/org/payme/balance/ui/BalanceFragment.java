@@ -20,6 +20,7 @@ import payme.apps.seven.org.payme.R;
 import payme.apps.seven.org.payme.balance.BalancePresenter;
 import payme.apps.seven.org.payme.balance.BalancePresenterImpl;
 import payme.apps.seven.org.payme.balance.adapters.BalanceFragmentAdapter;
+import payme.apps.seven.org.payme.list.DividerItemDecorator;
 import payme.apps.seven.org.payme.model.Balance;
 
 public class BalanceFragment extends Fragment implements BalanceView {
@@ -41,6 +42,7 @@ public class BalanceFragment extends Fragment implements BalanceView {
         this.adapter = new BalanceFragmentAdapter(this.balanceList);
         this.presenter = new BalancePresenterImpl(this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.addItemDecoration(new DividerItemDecorator(getActivity(), DividerItemDecorator.VERTICAL_LIST));
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         return view;
