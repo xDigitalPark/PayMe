@@ -5,12 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import payme.apps.seven.org.payme.PaymeApplication;
 import payme.apps.seven.org.payme.R;
 import payme.apps.seven.org.payme.model.Debt;
+import payme.apps.seven.org.payme.utils.Formatters;
 
 public class DebtDetailActivityAdapter extends RecyclerView.Adapter<DetailViewHolder> {
 
@@ -31,9 +34,10 @@ public class DebtDetailActivityAdapter extends RecyclerView.Adapter<DetailViewHo
     @Override
     public void onBindViewHolder(DetailViewHolder holder, int position) {
         final Debt debt = this.debtList.get(position);
+        String date = PaymeApplication.getFormatters().formatDate(debt.getDate());
         holder.conceptEditText.setText(debt.getConcept());
         holder.totalEditText.setText(debt.getCurrency() + " " + debt.getTotal());
-        holder.dateTextView.setText(formatDate(debt.getDate()));
+        holder.dateTextView.setText(date);
         if (debt.isMine()) {
             holder.totalEditText.setTextColor(holder.view.getResources().getColor(R.color.negativeDebt));
         } else {
@@ -78,13 +82,6 @@ public class DebtDetailActivityAdapter extends RecyclerView.Adapter<DetailViewHo
             total += debt.getTotal();
         }
         return total;
-    }
-
-    private String formatDate(Long millis) {
-        Date date=new Date(millis);
-        SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yy");
-        String dateText = df2.format(date);
-        return dateText;
     }
 
 }

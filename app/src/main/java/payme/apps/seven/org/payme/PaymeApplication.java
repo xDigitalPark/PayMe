@@ -4,21 +4,29 @@ import android.app.Application;
 
 import payme.apps.seven.org.payme.lib.data.DatabaseAdapter;
 import payme.apps.seven.org.payme.lib.data.LocalDatabaseAdapterImpl;
+import payme.apps.seven.org.payme.utils.Formatters;
 
 
 public class PaymeApplication extends Application {
 
     private static DatabaseAdapter database;
+    private static Formatters formatters;
 
     @Override
     public void onCreate() {
         super.onCreate();
         database = new LocalDatabaseAdapterImpl(this);
+        formatters = new Formatters(this);
     }
 
     public static DatabaseAdapter getDatabaseInstance() {
         return database;
     }
+
+    public static Formatters getFormatters() {
+        return formatters;
+    }
+
 }
 
 // TODO: Borrar child de Listas

@@ -27,6 +27,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import payme.apps.seven.org.payme.PaymeApplication;
 import payme.apps.seven.org.payme.R;
 import payme.apps.seven.org.payme.create.CreateDebtPresenter;
 import payme.apps.seven.org.payme.create.CreateDebtPresenterImpl;
@@ -254,9 +255,7 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
 
     @Override
     public void updateDateLabel() {
-        String myFormat = "MM-dd-yy";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        dateTextView.setText(sdf.format(myCalendar.getTime()));
+        dateTextView.setText(PaymeApplication.getFormatters().formatDate(myCalendar.getTimeInMillis()));
     }
 
     @Override
