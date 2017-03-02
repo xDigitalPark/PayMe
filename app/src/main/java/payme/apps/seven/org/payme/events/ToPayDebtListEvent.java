@@ -8,6 +8,7 @@ public class ToPayDebtListEvent {
 
     public static final short DEBT_LIST_OK = 0x01;
     public static final short DEBT_LIST_ERROR = 0x02;
+    public static final short DEBT_HEADER_DELETED_OK = 0x04;
 
     private short status;
     private List<DebtHeader> debtHeader;

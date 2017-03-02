@@ -12,10 +12,11 @@ import payme.apps.seven.org.payme.R;
 import payme.apps.seven.org.payme.list.common.ui.OnClickDebtHeaderListener;
 import payme.apps.seven.org.payme.model.DebtHeader;
 
-public class ToPayFragmentAdapter extends RecyclerView.Adapter<ToPayFragmentAdapter.MyPayVH> {
+public class ToPayFragmentAdapter extends RecyclerView.Adapter<ToPayViewHolder> {
 
     private List<DebtHeader> debtHeaderList;
     private OnClickDebtHeaderListener listener;
+    private DebtHeader selectedDebtHeader;
 
     public ToPayFragmentAdapter(List<DebtHeader> debtHeaderList, OnClickDebtHeaderListener listener) {
         this.debtHeaderList = debtHeaderList;
@@ -23,13 +24,13 @@ public class ToPayFragmentAdapter extends RecyclerView.Adapter<ToPayFragmentAdap
     }
 
     @Override
-    public MyPayVH onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ToPayViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_to_pay_item, parent, false);
-        return new MyPayVH(itemView);
+        return new ToPayViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(MyPayVH holder, int position) {
+    public void onBindViewHolder(ToPayViewHolder holder, int position) {
         final DebtHeader debtHeader = this.debtHeaderList.get(position);
         holder.nameEditText.setText(debtHeader.getName());
         holder.totalEditText.setText(debtHeader.getCurrency() + " " + debtHeader.getTotal());
@@ -37,6 +38,13 @@ public class ToPayFragmentAdapter extends RecyclerView.Adapter<ToPayFragmentAdap
             @Override
             public void onClick(View view) {
                 listener.onClick(debtHeader);
+            }
+        });
+        holder.view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                selectedDebtHeader = debtHeader;
+                return false;
             }
         });
     }
@@ -51,23 +59,7 @@ public class ToPayFragmentAdapter extends RecyclerView.Adapter<ToPayFragmentAdap
         notifyDataSetChanged();
     }
 
-    public class MyPayVH extends RecyclerView.ViewHolder {
-        public TextView nameEditText;
-        public TextView totalEditText;
-        public View view;
-
-        public MyPayVH(View view) {
-            super(view);
-            this.view = view;
-            this.nameEditText = (TextView) view.findViewById(R.id.fragment_to_pay_item_name_edittext);
-            this.totalEditText = (TextView) view.findViewById(R.id.fragment_to_pay_item_total_edittext);
-//            view.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    listener.onClick();
-//                }
-//            });
-        }
+    public DebtHeader getSelectedDebtHeader() {
+        return selectedDebtHeader;
     }
-
 }

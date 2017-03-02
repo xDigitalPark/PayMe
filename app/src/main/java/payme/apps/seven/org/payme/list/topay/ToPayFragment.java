@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -38,8 +39,8 @@ public class ToPayFragment extends Fragment implements ListDebtView, OnClickDebt
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_to_pay, container, false);
         ButterKnife.bind(this, view);
-        presenter = new ToPayDebtPresenterImpl(this);
         this.adapter = new ToPayFragmentAdapter(this.debtHeaderList, this);
+        this.presenter = new ToPayDebtPresenterImpl(this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -56,6 +57,12 @@ public class ToPayFragment extends Fragment implements ListDebtView, OnClickDebt
     public void onStart() {
         presenter.sendRetrieveDebtHeadersAction(true);
         super.onStart();
+    }
+
+    @Override
+    public void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
     }
 
     @Override
@@ -78,12 +85,20 @@ public class ToPayFragment extends Fragment implements ListDebtView, OnClickDebt
     }
 
     @Override
-    public void onDebtHeaderSelected(DebtHeader debtHeader) {
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getItemId() == ListDebtView.TO_PAY_CLOSE_DEBT) {
+            onDebtHeaderSelected(adapter.getSelectedDebtHeader());
+        }
+        return super.onContextItemSelected(item);
+    }
 
+    @Override
+    public void onDebtHeaderSelected(DebtHeader debtHeader) {
+        presenter.sendDeleteDebtHeaderAction(debtHeader);
     }
 
     @Override
     public void onHeaderDeleted() {
-
+        presenter.sendRetrieveDebtHeadersAction(true);
     }
 }

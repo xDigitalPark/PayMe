@@ -76,7 +76,9 @@ public class BalanceFragment extends Fragment implements BalanceView {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        onBalanceSelected(adapter.getSelectedBalance());
+        if (item.getItemId() == BalanceView.CLOSE_DEBT) {
+            onBalanceSelected(adapter.getSelectedBalance());
+        }
         return super.onContextItemSelected(item);
     }
 

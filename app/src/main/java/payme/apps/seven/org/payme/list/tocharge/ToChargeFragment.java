@@ -87,7 +87,9 @@ public class ToChargeFragment extends Fragment implements ListDebtView, OnClickD
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        onDebtHeaderSelected(adapter.getSelectedDebtHeader());
+        if (item.getItemId() == ListDebtView.TO_CHARGE_CLOSE_DEBT) {
+            onDebtHeaderSelected(adapter.getSelectedDebtHeader());
+        }
         return super.onContextItemSelected(item);
     }
 

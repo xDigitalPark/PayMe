@@ -3,6 +3,7 @@ package payme.apps.seven.org.payme.repositories;
 import payme.apps.seven.org.payme.PaymeApplication;
 import payme.apps.seven.org.payme.events.DebtDetailEvent;
 import payme.apps.seven.org.payme.events.ToChargeDebtListEvent;
+import payme.apps.seven.org.payme.events.ToPayDebtListEvent;
 import payme.apps.seven.org.payme.lib.data.DatabaseAdapter;
 import payme.apps.seven.org.payme.lib.events.EventBus;
 import payme.apps.seven.org.payme.lib.events.GreenRobotEventBus;
@@ -51,7 +52,10 @@ public class DebtRepositoryImpl implements DebtRepository {
                 event.setMessage("OK");
                 eventBus.post(event);
             } else {
-                // TODO: When is mine
+                ToPayDebtListEvent event = new ToPayDebtListEvent();
+                event.setStatus(ToPayDebtListEvent.DEBT_HEADER_DELETED_OK);
+                event.setMessage("OK");
+                eventBus.post(event);
             }
 
         }

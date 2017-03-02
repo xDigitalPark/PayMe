@@ -40,18 +40,21 @@ public class ToPayDebtPresenterImpl implements ListDebtPresenter {
 
     @Subscribe
     public void receiveDebtHeadersListResponse(ToPayDebtListEvent event) {
+        if (view == null) return;
         switch (event.getStatus())
         {
             case ToPayDebtListEvent.DEBT_LIST_OK:
-                if (view != null) {
-                    view.onLoadDebtHeaderList(event.getDebtHeader());
-                    view.onLoadTotal(event.getTotal());
-                }
+                view.onLoadDebtHeaderList(event.getDebtHeader());
+                view.onLoadTotal(event.getTotal());
+                break;
+            case ToPayDebtListEvent.DEBT_HEADER_DELETED_OK:
+                view.onHeaderDeleted();
+                break;
         }
     }
 
     @Override
     public void sendDeleteDebtHeaderAction(DebtHeader debtHeader) {
-
+        iteractor.doDeleteDebtHeader(debtHeader);
     }
 }
