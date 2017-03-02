@@ -56,6 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:src="@android:drawable/ic_input_add"
+        android:layout_margin="@dimen/fab_margin"
         android:layout_alignBottom="@+id/view"
         android:layout_alignRight="@+id/view"
         android:tint="@android:color/white"
