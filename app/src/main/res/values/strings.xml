@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">PayMe</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="activity_main.tabs.medeben">ME DEBE</string>
+    <string name="activity_main_tabs_lesdebo">LE DEBO</string>
+    <string name="activity_main_tabs_cuenta">CUENTA</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hola desde mi Fragment</string>
+    <string name="create_deb_activity_title">Crear Compromiso</string>
+    <string name="activity_create_debt_save_menu_title">Crear Deuda</string>
+    <string name="activity_create_debt_select_contact_title">Seleccionar contacto...</string>
+    <string name="create_debt_activity_invalid_contact_selection">Contacto no valido. Seleccione uno que tenga celular.</string>
+    <string name="create_debt_activity_invalid_total_amount">Invalid total value</string>
+    <string name="create_debt_activity_invalid_concept">Invalid Concept value.</string>
+    <string name="fragment_list_close_debt">Cerrar Deuda</string>
+    <string name="fragment_list_delete_debt">Borrar</string>
+    <string name="action_archive_debt_title">Archivar Cuenta</string>
+</resources>
