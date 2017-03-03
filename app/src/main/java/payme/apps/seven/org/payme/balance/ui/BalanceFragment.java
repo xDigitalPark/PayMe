@@ -98,6 +98,8 @@ public class BalanceFragment extends Fragment implements BalanceView, OnTabSelec
 
     @Override
     public void onResumeFragment() {
-        presenter.sendRetrieveBalancesAction();
+        if (presenter != null) {
+            presenter.sendRetrieveBalancesAction();
+        }
     }
 }

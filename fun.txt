@@ -1,1 +1,4 @@
 DPPM-001: The Balance is updated when a DebtHeader is closed. ==== DONE
+Firebase Integration.
+Use my cellphone number.
+Contacts automatic Added.

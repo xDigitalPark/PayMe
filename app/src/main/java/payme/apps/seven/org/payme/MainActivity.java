@@ -51,9 +51,12 @@ public class MainActivity extends AppCompatActivity {
                 mine = tab.getPosition() == 1;
                 if (tab.getPosition() == 2) {
                     hideFloatingButton(true);
-                    OnTabSelectedListener fragment = (OnTabSelectedListener) mSectionsPagerAdapter.instantiateItem(mViewPager, tab.getPosition());
-                    if (fragment != null)
-                        fragment.onResumeFragment();
+                    Object instance = mSectionsPagerAdapter.instantiateItem(mViewPager, tab.getPosition());
+                    if (instance != null) {
+                        OnTabSelectedListener fragment = (OnTabSelectedListener) instance;
+                        if (fragment != null)
+                            fragment.onResumeFragment();
+                    }
                 } else {
                     if (tab.getPosition() == 1) {
                         OnTabSelectedListener fragment = (OnTabSelectedListener) mSectionsPagerAdapter.instantiateItem(mViewPager, tab.getPosition());
