@@ -21,6 +21,7 @@ import payme.apps.seven.org.payme.create.ui.CreateDebtActivity;
 import payme.apps.seven.org.payme.balance.ui.BalanceFragment;
 import payme.apps.seven.org.payme.list.tocharge.ToChargeFragment;
 import payme.apps.seven.org.payme.list.topay.ToPayFragment;
+import payme.apps.seven.org.payme.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -63,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
                         if (fragment != null)
                             fragment.onResumeFragment();
                     }
-
                     hideFloatingButton(false);
                 }
             }
@@ -107,8 +107,15 @@ public class MainActivity extends AppCompatActivity {
         if(id == R.id.action_about_app) {
             Snackbar.make(mViewPager, "Coded by Erikson Murrugarra. DigitalPark, PE", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
+        } else if (id == R.id.action_settings) {
+            navigateToSettingsActivity();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void navigateToSettingsActivity() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
