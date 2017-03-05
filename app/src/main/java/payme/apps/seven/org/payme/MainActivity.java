@@ -21,7 +21,7 @@ import payme.apps.seven.org.payme.create.ui.CreateDebtActivity;
 import payme.apps.seven.org.payme.balance.ui.BalanceFragment;
 import payme.apps.seven.org.payme.list.tocharge.ToChargeFragment;
 import payme.apps.seven.org.payme.list.topay.ToPayFragment;
-import payme.apps.seven.org.payme.settings.SettingsActivity;
+import payme.apps.seven.org.payme.preferences.PreferencesActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -109,12 +109,13 @@ public class MainActivity extends AppCompatActivity {
                     .setAction("Action", null).show();
         } else if (id == R.id.action_settings) {
             navigateToSettingsActivity();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     public void navigateToSettingsActivity() {
-        Intent intent = new Intent(this, SettingsActivity.class);
+        Intent intent = new Intent(this, PreferencesActivity.class);
         startActivity(intent);
     }
 

@@ -1,6 +1,8 @@
 package payme.apps.seven.org.payme;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import payme.apps.seven.org.payme.lib.data.DatabaseAdapter;
 import payme.apps.seven.org.payme.lib.data.LocalDatabaseAdapterImpl;
