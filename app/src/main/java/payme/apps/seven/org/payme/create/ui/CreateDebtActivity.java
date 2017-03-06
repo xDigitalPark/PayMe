@@ -166,24 +166,24 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
             return false;
         }
         if (activityCreateDebtTotal.getText().toString().equals("")) {
-            showMessage(getString(R.string.create_debt_activity_invalid_total_amount));
+            activityCreateDebtTotal.setError(getString(R.string.create_debt_activity_invalid_total_amount));
             activityCreateDebtTotal.setFocusable(true);
             return false;
         }
         if (activityCreateDebtConcept.getText().toString().equals("")) {
-            showMessage(getString(R.string.create_debt_activity_invalid_concept));
+            activityCreateDebtConcept.setError(getString(R.string.create_debt_activity_invalid_concept));
             activityCreateDebtConcept.setFocusable(true);
             return false;
         }
         Double total = Double.parseDouble(activityCreateDebtTotal.getText().toString());
         String concept = activityCreateDebtConcept.getText().toString();
         if (total == 0) {
-            showMessage(getString(R.string.create_debt_activity_invalid_total_amount));
+            activityCreateDebtTotal.setError(getString(R.string.create_debt_activity_invalid_total_amount));
             activityCreateDebtTotal.setFocusable(true);
             return false;
         }
         if (concept.length() <= 2) {
-            showMessage(getString(R.string.create_debt_activity_invalid_concept));
+            activityCreateDebtConcept.setError(getString(R.string.create_debt_activity_invalid_concept));
             activityCreateDebtConcept.setFocusable(true);
             return false;
         }
