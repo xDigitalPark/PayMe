@@ -8,3 +8,11 @@ Pagos periodicos.
 
 Bugfix Tab panels.
 Acceso por contrasena agregado.
+
+create contacts table.
+http://www.androidhub4you.com/2012/07/auto-complete-demo-in-android.html
+http://www.javatpoint.com/android-autocompletetextview-example
+
+en los perfiles poder poner sus numeros de cuenta.
+Agregar prepago de deuda.
+historial

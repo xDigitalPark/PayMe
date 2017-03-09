@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_create_debt_layout"
     android:layout_width="match_parent"
@@ -8,110 +9,137 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".create.ui.CreateDebtActivity">
+    tools:context=".create.ui.CreateDebtActivity"
+    android:orientation="vertical">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/activity_create_debt_avatar"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@android:drawable/sym_def_app_icon"
-        app:civ_border_width="2dp"
-        app:civ_border_color="#FF000000"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
+
+
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+        <!--android:text="@string/activity_create_debt_select_contact_title"-->
+        <!--android:id="@+id/activity_create_debt_username"-->
+        <!--android:layout_marginLeft="26dp"-->
+        <!--android:layout_marginStart="26dp"-->
+        <!--android:textColor="#10a2d3"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_toRightOf="@+id/textView3"-->
+        <!--android:layout_toEndOf="@+id/textView3" />-->
+
+
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/activity_create_debt_select_contact_title"
-        android:id="@+id/activity_create_debt_username"
-        android:layout_marginLeft="26dp"
-        android:layout_marginStart="26dp"
-        android:textColor="#10a2d3"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/textView3"
-        android:layout_toEndOf="@+id/textView3" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
+        <AutoCompleteTextView
+            android:id="@+id/activity_create_debt_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/activity_create_debt_select_contact_title"
+            android:text="" />
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/activity_create_debt_avatar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@android:drawable/sym_def_app_icon"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="2dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="S/."
-        android:id="@+id/textView4"
-        android:layout_below="@+id/activity_create_debt_radiogroup"
-        android:layout_alignRight="@+id/activity_create_debt_avatar"
-        android:layout_alignEnd="@+id/activity_create_debt_avatar" />
+        android:orientation="vertical">
 
-    <EditText
+        <RadioGroup
+            android:id="@+id/activity_create_debt_radiogroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/activity_create_debt_not_mine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Me debe" />
+
+            <RadioButton
+                android:id="@+id/activity_create_debt_mine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="Le debo" />
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
         android:ems="10"
         android:hint="00.00"
-        android:id="@+id/activity_create_debt_total"
-        android:layout_below="@+id/activity_create_debt_radiogroup"
-        android:layout_alignLeft="@+id/activity_create_debt_radiogroup"
-        android:layout_alignStart="@+id/activity_create_debt_radiogroup" />
+        android:id="@+id/activity_create_debt_total"/>
 
-    <RadioGroup
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/activity_create_debt_avatar"
-        android:layout_alignLeft="@+id/activity_create_debt_username"
-        android:layout_alignStart="@+id/activity_create_debt_username"
-        android:id="@+id/activity_create_debt_radiogroup"
         android:orientation="vertical">
 
-        <RadioButton
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/activity_create_debt_concept"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Me debe"
-            android:id="@+id/activity_create_debt_not_mine"
-            android:checked="true" />
+            android:ems="10"
+            android:hint="Detalle"
+            android:inputType="textPersonName" />
+    </LinearLayout>
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Le debo"
-            android:id="@+id/activity_create_debt_mine"
-            android:checked="false" />
-    </RadioGroup>
-
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="Detalle"
-        android:ems="10"
-        android:id="@+id/activity_create_debt_concept"
-        android:layout_below="@+id/activity_create_debt_total"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/activity_create_debt_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hoy"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#10a2d3" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Hoy"
-        android:id="@+id/activity_create_debt_date"
-        android:layout_marginTop="26dp"
-        android:layout_below="@+id/activity_create_debt_concept"
-        android:layout_alignLeft="@+id/activity_create_debt_total"
-        android:layout_alignStart="@+id/activity_create_debt_total"
-        android:textColor="#10a2d3" />
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Fecha"
-        android:id="@+id/textView3"
-        android:layout_alignBottom="@+id/activity_create_debt_date"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <TextView
+            android:id="@+id/activity_create_debt_limit_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vencimiento"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#10a2d3" />
+    </LinearLayout>
 
 
-</RelativeLayout>
+</LinearLayout>
