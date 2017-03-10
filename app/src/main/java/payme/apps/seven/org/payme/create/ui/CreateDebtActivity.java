@@ -14,15 +14,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,9 +33,9 @@ import payme.apps.seven.org.payme.PaymeApplication;
 import payme.apps.seven.org.payme.R;
 import payme.apps.seven.org.payme.create.CreateDebtPresenter;
 import payme.apps.seven.org.payme.create.CreateDebtPresenterImpl;
+import payme.apps.seven.org.payme.events.DebtEvent;
 import payme.apps.seven.org.payme.model.Debt;
 import payme.apps.seven.org.payme.model.DebtHeader;
-import payme.apps.seven.org.payme.events.DebtEvent;
 
 public class CreateDebtActivity extends AppCompatActivity implements CreateDebtView {
 
@@ -47,13 +49,22 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
     @BindView(R.id.activity_create_debt_date)
     TextView dateTextView;
     @BindView(R.id.activity_create_debt_username)
-    TextView usernameTextView;
+    AutoCompleteTextView usernameTextView;
     @BindView(R.id.activity_create_debt_radiogroup)
     RadioGroup activityCreateDebtRadiogroup;
     @BindView(R.id.activity_create_debt_not_mine)
     RadioButton activityCreateDebtNotMine;
     @BindView(R.id.activity_create_debt_mine)
     RadioButton activityCreateDebtMine;
+    @BindView(R.id.activity_create_debt_limit_date)
+    TextView activityCreateDebtLimitDate;
+    @BindView(R.id.activity_create_debt_currency)
+    Spinner activityCreateDebtCurrency;
+    @BindView(R.id.activity_create_debt_date_clean)
+    ImageView activityCreateDebtDateClean;
+    @BindView(R.id.activity_create_debt_limit_clean)
+    ImageView activityCreateDebtLimitClean;
+
 
     private Debt debt = new Debt();
     private DebtHeader debtHeader = new DebtHeader();
@@ -81,7 +92,20 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
         };
         Bundle extras = getIntent().getExtras();
         prepopActivity(extras);
+
+        usernameTextView.setAdapter(getEmailAddressAdapter(this));
+        activityCreateDebtCurrency.setAdapter(getCurrencieList(this));
+        activityCreateDebtCurrency.setSelection(0);
+
         presenter.onCreate();
+    }
+
+    private ArrayAdapter<String> getCurrencieList(Context context) {
+        return new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, new String[]{"S/."});
+    }
+
+    private ArrayAdapter<String> getEmailAddressAdapter(Context context) {
+        return new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, new String[]{"erikson", "sayury"});
     }
 
     @Override
@@ -161,10 +185,12 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
 
     @Override
     public boolean validateViewForm() {
-        if (debt.getNumber() == null) {
-            showMessage(getString(R.string.create_debt_activity_invalid_contact_selection));
-            return false;
+
+        if (usernameTextView.getText().toString().equals("")) {
+            usernameTextView.setError("Invalid Contact Name");
+            usernameTextView.setFocusable(true);
         }
+
         if (activityCreateDebtTotal.getText().toString().equals("")) {
             activityCreateDebtTotal.setError(getString(R.string.create_debt_activity_invalid_total_amount));
             activityCreateDebtTotal.setFocusable(true);
@@ -189,16 +215,25 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
         }
         boolean mine = (activityCreateDebtRadiogroup.getCheckedRadioButtonId()
                 == R.id.activity_create_debt_mine);
-
+        //activityCreateDebtCurrency
+        String currency = activityCreateDebtCurrency.getSelectedItem().toString();
         debt.setConcept(activityCreateDebtConcept.getText().toString());
         debt.setTotal(total);
-        debt.setCurrency("S/.");
+        debt.setCurrency(currency);
         debt.setMine(mine);
         debt.setDate(myCalendar.getTimeInMillis());
 
         debtHeader.setTotal(total);
-        debtHeader.setCurrency("S/.");
+        debtHeader.setCurrency(currency);
         debtHeader.setMine(mine);
+
+        if (debt.getNumber() == null) {
+            String nameKey = usernameTextView.getText().toString().trim();
+            debt.setNumber(nameKey);
+            debtHeader.setNumber(nameKey);
+            debtHeader.setName(usernameTextView.getText().toString());
+        }
+
         return true;
     }
 
@@ -246,7 +281,7 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
         }
     }
 
-    @OnClick(R.id.activity_create_debt_username)
+    @OnClick(R.id.activity_create_debt_avatar)
     @Override
     public void showPickContactActivity() {
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);

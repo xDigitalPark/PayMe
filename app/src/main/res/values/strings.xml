@@ -8,9 +8,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hola desde mi Fragment</string>
-    <string name="create_deb_activity_title">Crear Compromiso</string>
+    <string name="create_deb_activity_title">Agregar deuda</string>
     <string name="activity_create_debt_save_menu_title">Crear Deuda</string>
-    <string name="activity_create_debt_select_contact_title">Seleccionar contacto...</string>
+    <string name="activity_create_debt_select_contact_title">Contacto:</string>
     <string name="create_debt_activity_invalid_contact_selection">Contacto no valido. Seleccione uno que tenga celular.</string>
     <string name="create_debt_activity_invalid_total_amount">Invalid total value</string>
     <string name="create_debt_activity_invalid_concept">Invalid Concept value.</string>
