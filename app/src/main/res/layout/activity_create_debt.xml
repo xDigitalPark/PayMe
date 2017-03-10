@@ -12,70 +12,29 @@
     tools:context=".create.ui.CreateDebtActivity"
     android:orientation="vertical">
 
-
-
-
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
-        <!--android:text="@string/activity_create_debt_select_contact_title"-->
-        <!--android:id="@+id/activity_create_debt_username"-->
-        <!--android:layout_marginLeft="26dp"-->
-        <!--android:layout_marginStart="26dp"-->
-        <!--android:textColor="#10a2d3"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_toRightOf="@+id/textView3"-->
-        <!--android:layout_toEndOf="@+id/textView3" />-->
-
-
-
-
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <AutoCompleteTextView
-            android:id="@+id/activity_create_debt_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/activity_create_debt_select_contact_title"
-            android:text="" />
-
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/activity_create_debt_avatar"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@android:drawable/sym_def_app_icon"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <RadioGroup
             android:id="@+id/activity_create_debt_radiogroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/activity_create_debt_not_mine"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:checked="true"
                 android:text="Me debe" />
 
             <RadioButton
                 android:id="@+id/activity_create_debt_mine"
+                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="false"
@@ -84,25 +43,72 @@
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#AAAAAA" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:layout_marginTop="5dip">
 
-        <EditText
+        <AutoCompleteTextView
+            android:id="@+id/activity_create_debt_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/activity_create_debt_select_contact_title"
+            android:text="" />
+
+        <!--<de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+            <!--android:id="@+id/activity_create_debt_avatar"-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:src="@android:drawable/sym_def_app_icon"-->
+            <!--app:civ_border_color="#FF000000"-->
+            <!--app:civ_border_width="2dp" />-->
+
+        <ImageView
+            android:id="@+id/activity_create_debt_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_menu_search" />
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#AAAAAA" />
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:hint="00.00"
-        android:id="@+id/activity_create_debt_total"/>
+        android:orientation="horizontal"
+        android:layout_marginTop="5dip">
+
+        <Spinner
+            android:id="@+id/activity_create_debt_currency"
+            android:layout_width="60dp"
+            android:layout_height="match_parent" />
+
+        <EditText
+            android:id="@+id/activity_create_debt_total"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:ems="10"
+            android:hint="00.00"
+            android:inputType="numberDecimal" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="5dip">
 
         <EditText
             android:id="@+id/activity_create_debt_concept"
@@ -116,29 +122,52 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:layout_marginTop="5dip">
 
         <TextView
             android:id="@+id/activity_create_debt_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hoy"
+            android:layout_weight="1"
+            android:text="Fecha | Hoy"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#10a2d3" />
+            android:textColor="@color/colorPrimaryDark" />
+
+        <ImageView
+            android:id="@+id/activity_create_debt_date_clean"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:srcCompat="@android:drawable/ic_delete" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#AAAAAA" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginTop="5dip"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/activity_create_debt_limit_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vencimiento"
+            android:layout_weight="1"
+            android:text="Vence | ..."
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#10a2d3" />
+            android:textColor="@color/colorPrimaryDark" />
+
+        <ImageView
+            android:id="@+id/activity_create_debt_limit_clean"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:srcCompat="@android:drawable/ic_delete" />
     </LinearLayout>
 
 

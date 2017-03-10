@@ -18,8 +18,10 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -56,6 +58,12 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
     RadioButton activityCreateDebtMine;
     @BindView(R.id.activity_create_debt_limit_date)
     TextView activityCreateDebtLimitDate;
+    @BindView(R.id.activity_create_debt_currency)
+    Spinner activityCreateDebtCurrency;
+    @BindView(R.id.activity_create_debt_date_clean)
+    ImageView activityCreateDebtDateClean;
+    @BindView(R.id.activity_create_debt_limit_clean)
+    ImageView activityCreateDebtLimitClean;
 
 
     private Debt debt = new Debt();
@@ -86,13 +94,18 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
         prepopActivity(extras);
 
         usernameTextView.setAdapter(getEmailAddressAdapter(this));
+        activityCreateDebtCurrency.setAdapter(getCurrencieList(this));
+        activityCreateDebtCurrency.setSelection(0);
 
         presenter.onCreate();
     }
 
+    private ArrayAdapter<String> getCurrencieList(Context context) {
+        return new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, new String[]{"S/."});
+    }
 
     private ArrayAdapter<String> getEmailAddressAdapter(Context context) {
-        return new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, new String[] {"erikson", "sayury"});
+        return new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, new String[]{"erikson", "sayury"});
     }
 
     @Override
@@ -202,15 +215,16 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
         }
         boolean mine = (activityCreateDebtRadiogroup.getCheckedRadioButtonId()
                 == R.id.activity_create_debt_mine);
-
+        //activityCreateDebtCurrency
+        String currency = activityCreateDebtCurrency.getSelectedItem().toString();
         debt.setConcept(activityCreateDebtConcept.getText().toString());
         debt.setTotal(total);
-        debt.setCurrency("S/.");
+        debt.setCurrency(currency);
         debt.setMine(mine);
         debt.setDate(myCalendar.getTimeInMillis());
 
         debtHeader.setTotal(total);
-        debtHeader.setCurrency("S/.");
+        debtHeader.setCurrency(currency);
         debtHeader.setMine(mine);
 
         if (debt.getNumber() == null) {
