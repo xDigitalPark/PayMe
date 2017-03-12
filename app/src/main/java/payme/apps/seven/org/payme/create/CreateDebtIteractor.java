@@ -5,4 +5,5 @@ import payme.apps.seven.org.payme.model.DebtHeader;
 
 public interface CreateDebtIteractor {
     void doCreateDebt(DebtHeader debtHeader, Debt debt);
+    void doRetrieveContactList();
 }

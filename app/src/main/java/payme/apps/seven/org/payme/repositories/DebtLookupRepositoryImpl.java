@@ -8,6 +8,7 @@ import java.util.List;
 import payme.apps.seven.org.payme.PaymeApplication;
 import payme.apps.seven.org.payme.lib.data.DatabaseAdapter;
 import payme.apps.seven.org.payme.model.Balance;
+import payme.apps.seven.org.payme.model.Contact;
 import payme.apps.seven.org.payme.model.DebtHeader;
 
 public class DebtLookupRepositoryImpl implements DebtLookupRepository {
@@ -61,6 +62,29 @@ public class DebtLookupRepositoryImpl implements DebtLookupRepository {
             }
             if (balanceList.size() == 1) {
                 return balanceList.get(0);
+            }
+        }
+        return null;
+    }
+
+
+    @Override
+    public Contact lookupContact(String number) {
+        String query = "SELECT id, number, name FROM " + DatabaseAdapter.CONTACT_TABLE +
+                " WHERE number = '" + number + "'";
+
+        Cursor cursor = database.retrieveData(query);
+        if (cursor != null) {
+            List<Contact> contactList = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                contactList.add(new Contact(
+                        cursor.getLong(cursor.getColumnIndex("id")),
+                        cursor.getString(cursor.getColumnIndex("number")),
+                        cursor.getString(cursor.getColumnIndex("name"))
+                ));
+            }
+            if (contactList.size() == 1) {
+                return contactList.get(0);
             }
         }
         return null;

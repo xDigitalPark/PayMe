@@ -5,15 +5,19 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
@@ -24,16 +28,21 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import payme.apps.seven.org.payme.PaymeApplication;
 import payme.apps.seven.org.payme.R;
+import payme.apps.seven.org.payme.create.adapters.ContactsArrayAdapter;
 import payme.apps.seven.org.payme.create.CreateDebtPresenter;
 import payme.apps.seven.org.payme.create.CreateDebtPresenterImpl;
-import payme.apps.seven.org.payme.events.DebtEvent;
+import payme.apps.seven.org.payme.events.CreateDebtEvent;
+import payme.apps.seven.org.payme.model.Contact;
 import payme.apps.seven.org.payme.model.Debt;
 import payme.apps.seven.org.payme.model.DebtHeader;
 
@@ -65,12 +74,16 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
     @BindView(R.id.activity_create_debt_limit_clean)
     ImageView activityCreateDebtLimitClean;
 
+    boolean dateSelected = false;
+    boolean dateLimitSelected = false;
 
     private Debt debt = new Debt();
     private DebtHeader debtHeader = new DebtHeader();
     private CreateDebtPresenter presenter;
     final Calendar myCalendar = Calendar.getInstance();
+    final Calendar myLimitCalendar = Calendar.getInstance();
     DatePickerDialog.OnDateSetListener datePickerListener;
+    DatePickerDialog.OnDateSetListener limiteDatePickerListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,10 +103,20 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
             }
 
         };
+        limiteDatePickerListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                myLimitCalendar.set(Calendar.YEAR, year);
+                myLimitCalendar.set(Calendar.MONTH, monthOfYear);
+                myLimitCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLimitDateLabel();
+            }
+
+        };
         Bundle extras = getIntent().getExtras();
         prepopActivity(extras);
 
-        usernameTextView.setAdapter(getEmailAddressAdapter(this));
         activityCreateDebtCurrency.setAdapter(getCurrencieList(this));
         activityCreateDebtCurrency.setSelection(0);
 
@@ -104,8 +127,10 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
         return new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, new String[]{"S/."});
     }
 
-    private ArrayAdapter<String> getEmailAddressAdapter(Context context) {
-        return new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, new String[]{"erikson", "sayury"});
+    @Override
+    protected void onStart() {
+        presenter.sendRetrieveContactList();
+        super.onStart();
     }
 
     @Override
@@ -221,7 +246,14 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
         debt.setTotal(total);
         debt.setCurrency(currency);
         debt.setMine(mine);
-        debt.setDate(myCalendar.getTimeInMillis());
+
+        if (dateSelected)
+            debt.setDate(myCalendar.getTimeInMillis());
+        else
+            debt.setDate((new Date().getTime()));
+
+        if (dateLimitSelected)
+            debt.setLimit(myLimitCalendar.getTimeInMillis());
 
         debtHeader.setTotal(total);
         debtHeader.setCurrency(currency);
@@ -238,7 +270,7 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
     }
 
     @Override
-    public void onDebtCreated(DebtEvent event) {
+    public void onDebtCreated(CreateDebtEvent event) {
 //        showMessage(event.getMessage());
         finish();
     }
@@ -251,6 +283,13 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
         usernameTextView.setText(name);
     }
 
+    private void nullateContactInfo() {
+
+        debt.setNumber(null);
+        debtHeader.setNumber(null);
+        debtHeader.setName(null);
+    }
+
     @OnClick(R.id.activity_create_debt_date)
     @Override
     public void showDatePickerDialog() {
@@ -259,6 +298,16 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
                 myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
+
+    @OnClick(R.id.activity_create_debt_limit_date)
+//    @Override
+    public void showLimitDatePickerDialog() {
+        new DatePickerDialog(CreateDebtActivity.this, limiteDatePickerListener,
+                myLimitCalendar.get(Calendar.YEAR),
+                myLimitCalendar.get(Calendar.MONTH),
+                myLimitCalendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
 
     @Override
     public void onPickedContact(Uri contactData) {
@@ -290,7 +339,32 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
 
     @Override
     public void updateDateLabel() {
-        dateTextView.setText(PaymeApplication.getFormatters().formatDate(myCalendar.getTimeInMillis()));
+        dateSelected = true;
+        dateTextView.setText("Fecha | " + PaymeApplication.getFormatters().formatDate(myCalendar.getTimeInMillis()));
+        dateTextView.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        activityCreateDebtDateClean.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.activity_create_debt_date_clean)
+    public void cleanDateLabel() {
+        dateSelected = false;
+        activityCreateDebtDateClean.setVisibility(View.INVISIBLE);
+        dateTextView.setTextColor(Color.GRAY);
+        dateTextView.setText("Fecha | Hoy");
+    }
+
+    public void updateLimitDateLabel() {
+        dateLimitSelected = true;
+        activityCreateDebtLimitDate.setText("Vence | " + PaymeApplication.getFormatters().formatDate(myLimitCalendar.getTimeInMillis()));
+        activityCreateDebtLimitDate.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        activityCreateDebtLimitClean.setVisibility(View.VISIBLE);
+    }
+    @OnClick(R.id.activity_create_debt_limit_clean)
+    public void cleanLimitDateLabel() {
+        dateLimitSelected = false;
+        activityCreateDebtLimitClean.setVisibility(View.INVISIBLE);
+        activityCreateDebtLimitDate.setTextColor(Color.GRAY);
+        activityCreateDebtLimitDate.setText("Vence | Nunca");
     }
 
     @Override
@@ -298,5 +372,32 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
         hideKeyboard();
         Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
+    }
+
+    @Override
+    public void onContactListLoaded(List<Contact> contactList) {
+        final ContactsArrayAdapter arrayAdapter = new ContactsArrayAdapter(this, contactList);
+        usernameTextView.setAdapter(arrayAdapter);
+        usernameTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Contact contact = arrayAdapter.getItem(i);
+                updateContactInfo(contact.getNumber(), contact.getName());
+            }
+        });
+        usernameTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                nullateContactInfo();
+            }
+        });
     }
 }

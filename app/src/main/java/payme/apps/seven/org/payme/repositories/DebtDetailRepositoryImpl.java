@@ -30,7 +30,7 @@ public class DebtDetailRepositoryImpl implements DebtDetailRespository {
     @Override
     public void getDebts(String number, boolean mine) {
         String table = (!mine)?DatabaseAdapter.DEBT_TABLE_TOCHARGE:DatabaseAdapter.DEBT_TABLE_TOPAY;
-        String query = "SELECT id, concept, number, currency, total, date, mine FROM " + table +" " +
+        String query = "SELECT id, concept, number, currency, total, date, mine, date_limit FROM " + table +" " +
                 "WHERE mine = " + (mine?1:0) + " and number = '" + number + "'";
         Cursor cursor = database.retrieveData(query);
         List<Debt> debtList = new ArrayList<>();
@@ -45,7 +45,8 @@ public class DebtDetailRepositoryImpl implements DebtDetailRespository {
                         cursor.getString(cursor.getColumnIndex("currency")),
                         cursor.getLong(cursor.getColumnIndex("date")),
                         cursor.getDouble(cursor.getColumnIndex("total")),
-                        cursor.getInt(cursor.getColumnIndex("mine")) != 0
+                        cursor.getInt(cursor.getColumnIndex("mine")) != 0,
+                        cursor.getLong(cursor.getColumnIndex("date_limit"))
                 );
                 debtList.add(debt);
                 total = total + debt.getTotal();

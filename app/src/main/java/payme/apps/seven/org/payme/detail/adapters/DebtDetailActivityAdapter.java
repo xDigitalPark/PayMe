@@ -38,6 +38,11 @@ public class DebtDetailActivityAdapter extends RecyclerView.Adapter<DetailViewHo
         holder.conceptEditText.setText(debt.getConcept());
         holder.totalEditText.setText(debt.getCurrency() + " " + debt.getTotal());
         holder.dateTextView.setText(date);
+        if (debt.getLimit() != null && debt.getLimit() != 0) {
+            holder.limitDateTextView.setText(PaymeApplication.getFormatters().formatDate(debt.getLimit()));
+            holder.limitDateTextView.setVisibility(View.VISIBLE);
+            holder.notifImageView.setVisibility(View.VISIBLE);
+        }
         if (debt.isMine()) {
             holder.totalEditText.setTextColor(holder.view.getResources().getColor(R.color.negativeDebt));
         } else {

@@ -2,7 +2,7 @@ package payme.apps.seven.org.payme.create;
 
 import org.greenrobot.eventbus.Subscribe;
 
-import payme.apps.seven.org.payme.events.DebtEvent;
+import payme.apps.seven.org.payme.events.CreateDebtEvent;
 import payme.apps.seven.org.payme.create.ui.CreateDebtView;
 import payme.apps.seven.org.payme.model.Debt;
 import payme.apps.seven.org.payme.model.DebtHeader;
@@ -53,13 +53,23 @@ public class CreateDebtPresenterImpl implements CreateDebtPresenter {
 
     @Override
     @Subscribe
-    public void receiveNewDebtCreationResponse(DebtEvent event) {
+    public void receiveNewDebtCreationResponse(CreateDebtEvent event) {
         switch (event.getStatus()) {
-            case DebtEvent.DEBT_CREATED:
+            case CreateDebtEvent.DEBT_CREATED:
                 if (view != null) {
                     view.hideProgressBar();
                     view.onDebtCreated(event);
                 }
+                break;
+            case CreateDebtEvent.CONTACT_LIST_OK:
+                if (view != null) {
+                    view.onContactListLoaded(event.getContactList());
+                }
         }
+    }
+
+    @Override
+    public void sendRetrieveContactList() {
+        interactor.doRetrieveContactList();
     }
 }

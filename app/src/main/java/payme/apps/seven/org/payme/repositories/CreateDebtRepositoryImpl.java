@@ -5,7 +5,8 @@ import android.content.ContentValues;
 import payme.apps.seven.org.payme.PaymeApplication;
 import payme.apps.seven.org.payme.lib.data.DatabaseAdapter;
 import payme.apps.seven.org.payme.model.Balance;
-import payme.apps.seven.org.payme.events.DebtEvent;
+import payme.apps.seven.org.payme.events.CreateDebtEvent;
+import payme.apps.seven.org.payme.model.Contact;
 import payme.apps.seven.org.payme.model.Debt;
 import payme.apps.seven.org.payme.model.DebtHeader;
 import payme.apps.seven.org.payme.lib.events.EventBus;
@@ -27,13 +28,14 @@ public class CreateDebtRepositoryImpl implements CreateDebtRepository {
     public void createDebt(DebtHeader debtHeader, Debt debt) {
         boolean debtHeaderAdded = createDebtHeader(debtHeader),
                 debtAdded = createDebt(debt),
-                balanceAdded = createBalance(debtHeader, debt);
-        if(debtHeaderAdded && debtAdded && balanceAdded) {
-            DebtEvent event = new DebtEvent();
+                balanceAdded = createBalance(debtHeader, debt),
+                contactUpserted = upsertContact(debtHeader);
+        if(debtHeaderAdded && debtAdded && balanceAdded && contactUpserted) {
+            CreateDebtEvent event = new CreateDebtEvent();
             event.setMessage("Header creado");
             event.setDebt(debt);
             event.setDebtHeader(debtHeader);
-            event.setStatus(DebtEvent.DEBT_CREATED);
+            event.setStatus(CreateDebtEvent.DEBT_CREATED);
             eventBus.post(event);
         }
     }
@@ -75,6 +77,7 @@ public class CreateDebtRepositoryImpl implements CreateDebtRepository {
         headerData.put(DatabaseAdapter.DEBT_TABLE_COL_TOTAL, debt.getTotal());
         headerData.put(DatabaseAdapter.DEBT_TABLE_COL_DATE, debt.getDate());
         headerData.put(DatabaseAdapter.DEBT_TABLE_COL_MINE, debt.isMine());
+        headerData.put(DatabaseAdapter.DEBT_TABLE_COL_DATE_LIMIT, debt.getLimit());
         if (!debt.isMine()) {
             return database.insertData(DatabaseAdapter.DEBT_TABLE_TOCHARGE, headerData);
         } else {
@@ -118,6 +121,17 @@ public class CreateDebtRepositoryImpl implements CreateDebtRepository {
         } else {
             return database.updateData(DatabaseAdapter.BALANCE_TABLE, balanceData, "number = ?", number);
         }
+    }
+
+    private boolean upsertContact(DebtHeader debtHeader) {
+        Contact foundContact = debtLookupRepository.lookupContact(debtHeader.getNumber());
+        if (foundContact == null) {
+            ContentValues contactData = new ContentValues();
+            contactData.put(DatabaseAdapter.CONTACT_NUMBER, debtHeader.getNumber());
+            contactData.put(DatabaseAdapter.CONTACT_NAME, debtHeader.getName());
+            return database.insertData(DatabaseAdapter.CONTACT_TABLE, contactData);
+        }
+        return true;
     }
 
 }

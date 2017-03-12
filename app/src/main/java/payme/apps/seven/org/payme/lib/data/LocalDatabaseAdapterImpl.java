@@ -20,10 +20,12 @@ public class LocalDatabaseAdapterImpl  extends SQLiteOpenHelper implements Datab
         db.execSQL("CREATE TABLE " + DEBT_HEADER_TABLE_TOCHARGE + " (number TEXT PRIMARY KEY, name TEXT, currency TEXT, total REAL, mine NUMERIC)");
         db.execSQL("CREATE TABLE " + DEBT_HEADER_TABLE_TOPAY + " (number TEXT PRIMARY KEY, name TEXT, currency TEXT, total REAL, mine NUMERIC)");
         // DEBT
-        db.execSQL("CREATE TABLE " + DEBT_TABLE_TOCHARGE + " (id INTEGER PRIMARY KEY AUTOINCREMENT, number TEXT, concept TEXT, currency TEXT, total REAL, date INT, mine NUMERIC)");
-        db.execSQL("CREATE TABLE " + DEBT_TABLE_TOPAY + " (id INTEGER PRIMARY KEY AUTOINCREMENT, number TEXT, concept TEXT, currency TEXT, total REAL, date INT, mine NUMERIC)");
+        db.execSQL("CREATE TABLE " + DEBT_TABLE_TOCHARGE + " (id INTEGER PRIMARY KEY AUTOINCREMENT, number TEXT, concept TEXT, currency TEXT, total REAL, date INT, mine NUMERIC, date_limit INT)");
+        db.execSQL("CREATE TABLE " + DEBT_TABLE_TOPAY + " (id INTEGER PRIMARY KEY AUTOINCREMENT, number TEXT, concept TEXT, currency TEXT, total REAL, date INT, mine NUMERIC, date_limit INT)");
         // BALANCE
         db.execSQL("CREATE TABLE " + BALANCE_TABLE + " (number TEXT, name TEXT, currency TEXT, mytotal REAL, partytotal REAL, total REAL, mine NUMERIC)");
+        // CONTACTS
+        db.execSQL("CREATE TABLE " + CONTACT_TABLE + " (id INTEGER PRIMARY KEY AUTOINCREMENT, number TEXT, name TEXT)");
     }
 
     @Override
@@ -33,6 +35,7 @@ public class LocalDatabaseAdapterImpl  extends SQLiteOpenHelper implements Datab
         db.execSQL("DROP TABLE IF EXISTS " + DEBT_TABLE_TOCHARGE);
         db.execSQL("DROP TABLE IF EXISTS " + DEBT_TABLE_TOPAY);
         db.execSQL("DROP TABLE IF EXISTS " + BALANCE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + CONTACT_TABLE);
         onCreate(db);
     }
 

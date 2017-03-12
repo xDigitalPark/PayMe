@@ -74,8 +74,8 @@
         <ImageView
             android:id="@+id/activity_create_debt_avatar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/ic_menu_search" />
+            android:layout_height="40dp"
+            app:srcCompat="@android:drawable/ic_search_category_default" />
 
     </LinearLayout>
     <View
@@ -91,6 +91,7 @@
         <Spinner
             android:id="@+id/activity_create_debt_currency"
             android:layout_width="60dp"
+            android:layout_weight="1"
             android:layout_height="match_parent" />
 
         <EditText
@@ -123,7 +124,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="5dip">
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:id="@+id/activity_create_debt_date_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            app:srcCompat="@android:drawable/ic_menu_my_calendar" />
 
         <TextView
             android:id="@+id/activity_create_debt_date"
@@ -132,7 +139,7 @@
             android:layout_weight="1"
             android:text="Fecha | Hoy"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/colorPrimaryDark" />
+             />
 
         <ImageView
             android:id="@+id/activity_create_debt_date_clean"
@@ -145,22 +152,30 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#AAAAAA" />
+        android:background="#AAAAAA"
+        android:layout_marginTop="2dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dip"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/activity_create_debt_limit_icon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/ic_notifications_black_24dp" />
 
         <TextView
             android:id="@+id/activity_create_debt_limit_date"
+            android:layout_marginLeft="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Vence | ..."
+            android:text="Vence | Nunca"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/colorPrimaryDark" />
+            />
 
         <ImageView
             android:id="@+id/activity_create_debt_limit_clean"

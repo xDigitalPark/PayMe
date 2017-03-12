@@ -9,18 +9,20 @@ public class Debt {
     private String concept;
     private String currency;
     private Long date;
+    private Long limit;
     private Double total;
     private boolean mine;
 
     public Debt() {
     }
 
-    public Debt(Long id, String number, String concept, String currency, Long date, Double total, boolean mine) {
+    public Debt(Long id, String number, String concept, String currency, Long date, Double total, boolean mine, Long limit) {
         this.id = id;
         this.number = number;
         this.concept = concept;
         this.currency = currency;
         this.date = date;
+        this.limit = limit;
         this.total = total;
         this.mine = mine;
     }
@@ -90,5 +92,13 @@ public class Debt {
     @Override
     public int hashCode() {
         return this.getId().intValue();
+    }
+
+    public Long getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Long limit) {
+        this.limit = limit;
     }
 }
