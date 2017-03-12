@@ -14,9 +14,9 @@
     <string name="create_debt_activity_invalid_contact_selection">Contacto no valido. Seleccione uno que tenga celular.</string>
     <string name="create_debt_activity_invalid_total_amount">Invalid total value</string>
     <string name="create_debt_activity_invalid_concept">Invalid Concept value.</string>
-    <string name="fragment_list_close_debt">Cerrar Deuda</string>
-    <string name="fragment_list_delete_debt">Borrar</string>
-    <string name="action_archive_debt_title">Archivar Cuenta</string>
+    <string name="fragment_list_close_debt">Liquidar Deuda</string>
+    <string name="fragment_list_delete_debt">Eliminar Deuda</string>
+    <string name="action_archive_debt_title">Liquidar Deuda</string>
 
     <string name="password_activity_wrong_password">Contraseña incorrecta</string>
 

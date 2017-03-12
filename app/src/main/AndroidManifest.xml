@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="payme.apps.seven.org.payme">
+    package="payme.pe.apps.digitakpark.payme">
 
     <!-- services -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
-        android:name=".PaymeApplication"
+        android:name="apps.digitakpark.payme.PaymeApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="apps.digitakpark.payme.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".detail.ui.DebtDetailActivity"
-            android:parentActivityName=".MainActivity"
+            android:name="apps.digitakpark.payme.detail.ui.DebtDetailActivity"
+            android:parentActivityName="apps.digitakpark.payme.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".create.ui.CreateDebtActivity"
+            android:name="apps.digitakpark.payme.create.ui.CreateDebtActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".password.PasswordActivity">
+        <activity android:name="apps.digitakpark.payme.password.PasswordActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".preferences.PreferencesActivity"
+            android:name="apps.digitakpark.payme.preferences.PreferencesActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait"
             />

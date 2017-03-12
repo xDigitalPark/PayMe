@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="payme.apps.seven.org.payme.detail.ui.DebtDetailActivity"
+    tools:context="payme.pe.apps.digitakpark.payme.apps.digitakpark.payme.detail.ui.DebtDetailActivity"
     android:background="@color/listBackground">
 
 

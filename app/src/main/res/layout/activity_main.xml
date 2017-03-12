@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="payme.apps.seven.org.payme.MainActivity">
+    tools:context="payme.pe.apps.digitakpark.payme.apps.digitakpark.payme.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
