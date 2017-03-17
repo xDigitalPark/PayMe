@@ -84,7 +84,7 @@ public class ToChargeFragment extends Fragment implements ListDebtView, OnClickD
 
     @Override
     public void onLoadTotal(Double total) {
-        fragmentToChargeTotal.setText("Total: S/." + total);
+        fragmentToChargeTotal.setText("Total   |   S/. " + total);
     }
 
     @Override

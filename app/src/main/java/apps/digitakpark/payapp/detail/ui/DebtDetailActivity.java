@@ -131,6 +131,9 @@ public class DebtDetailActivity extends AppCompatActivity implements DebtDetailV
             case DELETE_DEBT:
                 onDeleteDebtOptionSelected(debt);
                 break;
+            case EDIT_DEBT:
+                onEditDebtOptionSelected(debt);
+                break;
         }
     }
 
@@ -185,5 +188,20 @@ public class DebtDetailActivity extends AppCompatActivity implements DebtDetailV
             return;
         }
         startActivity(callIntent);
+    }
+
+    @Override
+    public void onEditDebtOptionSelected(Debt debt) {
+        Intent intent = new Intent(getApplicationContext(), CreateDebtActivity.class);
+        intent.putExtra("debt_id", debt.getId());
+        intent.putExtra("debt_mine", mine);
+        intent.putExtra("debt_number", number);
+        intent.putExtra("debt_name", name);
+        intent.putExtra("debt_edit", true);
+        intent.putExtra("debt_total", debt.getTotal());
+        intent.putExtra("debt_concept", debt.getConcept());
+        intent.putExtra("debt_date", debt.getDate());
+        intent.putExtra("debt_limit", debt.getLimit());
+        startActivity(intent);
     }
 }

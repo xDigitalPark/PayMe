@@ -1,6 +1,7 @@
 package apps.digitakpark.payapp.repositories;
 
 import android.content.ContentValues;
+import android.provider.ContactsContract;
 
 import apps.digitakpark.payapp.PaymeApplication;
 import apps.digitakpark.payapp.lib.data.DatabaseAdapter;
@@ -70,18 +71,18 @@ public class CreateDebtRepositoryImpl implements CreateDebtRepository {
 
     @Override
     public boolean createDebt(Debt debt) {
-        ContentValues headerData = new ContentValues();
-        headerData.put(DatabaseAdapter.DEBT_TABLE_COL_CONCEPT, debt.getConcept());
-        headerData.put(DatabaseAdapter.DEBT_TABLE_COL_NUMBER, debt.getNumber());
-        headerData.put(DatabaseAdapter.DEBT_TABLE_COL_CURRENCY, debt.getCurrency());
-        headerData.put(DatabaseAdapter.DEBT_TABLE_COL_TOTAL, debt.getTotal());
-        headerData.put(DatabaseAdapter.DEBT_TABLE_COL_DATE, debt.getDate());
-        headerData.put(DatabaseAdapter.DEBT_TABLE_COL_MINE, debt.isMine());
-        headerData.put(DatabaseAdapter.DEBT_TABLE_COL_DATE_LIMIT, debt.getLimit());
+        ContentValues debtData = new ContentValues();
+        debtData.put(DatabaseAdapter.DEBT_TABLE_COL_CONCEPT, debt.getConcept());
+        debtData.put(DatabaseAdapter.DEBT_TABLE_COL_NUMBER, debt.getNumber());
+        debtData.put(DatabaseAdapter.DEBT_TABLE_COL_CURRENCY, debt.getCurrency());
+        debtData.put(DatabaseAdapter.DEBT_TABLE_COL_TOTAL, debt.getTotal());
+        debtData.put(DatabaseAdapter.DEBT_TABLE_COL_DATE, debt.getDate());
+        debtData.put(DatabaseAdapter.DEBT_TABLE_COL_MINE, debt.isMine());
+        debtData.put(DatabaseAdapter.DEBT_TABLE_COL_DATE_LIMIT, debt.getLimit());
         if (!debt.isMine()) {
-            return database.insertData(DatabaseAdapter.DEBT_TABLE_TOCHARGE, headerData);
+            return database.insertData(DatabaseAdapter.DEBT_TABLE_TOCHARGE, debtData);
         } else {
-            return database.insertData(DatabaseAdapter.DEBT_TABLE_TOPAY, headerData);
+            return database.insertData(DatabaseAdapter.DEBT_TABLE_TOPAY, debtData);
         }
     }
 
@@ -132,6 +133,63 @@ public class CreateDebtRepositoryImpl implements CreateDebtRepository {
             return database.insertData(DatabaseAdapter.CONTACT_TABLE, contactData);
         }
         return true;
+    }
+
+    @Override
+    public void editDebt(DebtHeader debtHeader, Debt debt, Double editPreTotal) {
+         boolean debtUpdated = updateDebt(debt),
+                 debtHeaderUpdated = updateDebtHeader(debt, editPreTotal);
+
+        if(debtUpdated && debtHeaderUpdated) {
+            CreateDebtEvent event = new CreateDebtEvent();
+            event.setMessage("Header modificado");
+            event.setDebt(debt);
+            event.setDebtHeader(debtHeader);
+            event.setStatus(CreateDebtEvent.DEBT_UPDATED);
+            eventBus.post(event);
+        }
+
+    }
+
+    private boolean updateDebt(Debt debt) {
+        String debtTable = debt.isMine()?DatabaseAdapter.DEBT_TABLE_TOPAY:
+                DatabaseAdapter.DEBT_TABLE_TOCHARGE;
+        ContentValues debtData = new ContentValues();
+        debtData.put(DatabaseAdapter.DEBT_TABLE_COL_CONCEPT, debt.getConcept());
+        debtData.put(DatabaseAdapter.DEBT_TABLE_COL_CURRENCY, debt.getCurrency());
+        debtData.put(DatabaseAdapter.DEBT_TABLE_COL_TOTAL, debt.getTotal());
+        debtData.put(DatabaseAdapter.DEBT_TABLE_COL_DATE, debt.getDate());
+        debtData.put(DatabaseAdapter.DEBT_TABLE_COL_DATE_LIMIT, debt.getLimit());
+        return database.updateData(debtTable, debtData, "id = ?", ""+debt.getId());
+    }
+
+    private boolean updateDebtHeader(Debt debt, Double editPreTotal) {
+        String debtHeaderTable = debt.isMine()?DatabaseAdapter.DEBT_HEADER_TABLE_TOPAY:
+                DatabaseAdapter.DEBT_HEADER_TABLE_TOCHARGE;
+
+        DebtHeader debtHeader = debtLookupRepository.lookupDebtHeader(debt.getNumber(), debt.isMine());
+        Double newTotal = debtHeader.getTotal() + (debt.getTotal() - editPreTotal);
+        ContentValues headerData = new ContentValues();
+        headerData.put(DatabaseAdapter.DEBT_HEADER_TABLE_COL_TOTAL, newTotal);
+        boolean updated = database.updateData(debtHeaderTable, headerData, "number = ?", debtHeader.getNumber());
+        if (updated) {
+            Balance balance = debtLookupRepository.lookupBalance(debtHeader.getNumber());
+
+            ContentValues balanceData = new ContentValues();
+            if (debtHeader.isMine()) {
+                balance.setMyTotal(newTotal);
+                balanceData.put(DatabaseAdapter.BALANCE_TABLE_COL_MY_TOTAL, balance.getMyTotal());
+            }
+            else {
+                balance.setPartyTotal(newTotal);
+                balanceData.put(DatabaseAdapter.BALANCE_TABLE_COL_PARTY_TOTAL, balance.getPartyTotal());
+            }
+            balance.setTotal(balance.getPartyTotal() - balance.getMyTotal());
+            balanceData.put(DatabaseAdapter.BALANCE_TABLE_COL_TOTAL, balance.getTotal());
+            return database.updateData(DatabaseAdapter.BALANCE_TABLE, balanceData, "number = ?", balance.getNumber());
+        }
+        return false;
+
     }
 
 }

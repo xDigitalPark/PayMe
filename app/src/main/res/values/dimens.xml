@@ -5,9 +5,10 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="text_margin">16dp</dimen>
-    <dimen name="common_bottom_bar_size_details">45dp</dimen>
+    <dimen name="common_bottom_bar_size_details">40dp</dimen>
     <dimen name="debt_text_size">17dp</dimen>
     <dimen name="debt_small_text_size">14dp</dimen>
     <dimen name="debt_date_text_size">12dp</dimen>
     <dimen name="debt_item_padding">10dp</dimen>
+    <dimen name="debt_total_padding">10dp</dimen>
 </resources>

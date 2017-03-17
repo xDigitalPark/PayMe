@@ -10,4 +10,5 @@
     <color name="positiveDebt">#1C8360</color>
     <color name="negativeDebt">#F01E65</color>
     <color name="listBackground">#FCFAEA</color>
+    <color name="totalBackground">#F3F1DC</color>
 </resources>

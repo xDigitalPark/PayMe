@@ -52,6 +52,15 @@ public class CreateDebtPresenterImpl implements CreateDebtPresenter {
     }
 
     @Override
+    public void sendEditDebtAction(DebtHeader debtHeader, Debt debt, Double editPreTotal) {
+        if (view != null) {
+            view.hideKeyboard();
+            view.showProgressBar();
+            interactor.doEditDebt(debtHeader, debt, editPreTotal);
+        }
+    }
+
+    @Override
     @Subscribe
     public void receiveNewDebtCreationResponse(CreateDebtEvent event) {
         switch (event.getStatus()) {
@@ -64,6 +73,12 @@ public class CreateDebtPresenterImpl implements CreateDebtPresenter {
             case CreateDebtEvent.CONTACT_LIST_OK:
                 if (view != null) {
                     view.onContactListLoaded(event.getContactList());
+                }
+                break;
+            case CreateDebtEvent.DEBT_UPDATED:
+                if (view != null) {
+                    view.hideProgressBar();
+                    view.onDebtUpdated();
                 }
         }
     }

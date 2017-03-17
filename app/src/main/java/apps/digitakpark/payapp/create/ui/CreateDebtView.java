@@ -10,6 +10,7 @@ import apps.digitakpark.payapp.model.Contact;
 
 public interface CreateDebtView {
     void createNewDebt();
+    void editDebt();
     void hideKeyboard();
     void showProgressBar();
     void hideProgressBar();
@@ -17,11 +18,13 @@ public interface CreateDebtView {
     void showDatePickerDialog();
     void onPickedContact(Uri contactData);
     void showPickContactActivity();
-    void updateDateLabel();
+    void updateDateLabel(Long milis);
     void updateContactInfo(String number, String name);
     void showMessage(String message);
     void prepopActivity(Bundle extras);
     void onContactListLoaded(List<Contact> contactList);
     boolean validateViewForm();
+    void disableInputsToEdit();
+    void onDebtUpdated();
 
 }

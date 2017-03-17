@@ -75,7 +75,12 @@ public class BalanceFragment extends Fragment implements BalanceView, OnTabSelec
 
     @Override
     public void onLoadTotal(Double total) {
-        fragmentBalanceDetailTotal.setText("Total: S/." + total);
+        fragmentBalanceDetailTotal.setText("Total   |   S/. " + total);
+        if (total < 0)
+            fragmentBalanceDetailTotal.setTextColor(getResources().getColor(R.color.negativeDebt));
+        else
+            fragmentBalanceDetailTotal.setTextColor(getResources().getColor(R.color.positiveDebt));
+
     }
 
     @Override

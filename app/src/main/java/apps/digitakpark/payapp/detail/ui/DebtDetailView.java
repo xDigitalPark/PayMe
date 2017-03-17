@@ -10,6 +10,7 @@ public interface DebtDetailView {
 
     int CLOSE_DEBT = 0;
     int DELETE_DEBT = 1;
+    int EDIT_DEBT = 2;
 
     void prepopActivity(Bundle extras);
     void onLoadDebtList(List<Debt> debtList);
@@ -18,6 +19,7 @@ public interface DebtDetailView {
     void onDebtSelected(Debt debt, int actionId);
     void onCloseDebtOptionSelected(Debt debt);
     void onDeleteDebtOptionSelected(Debt debt);
+    void onEditDebtOptionSelected(Debt debt);
     void onDebtDeleted(Long id);
     void onDebtHeaderDeleted();
     void callToNumber(String number);

@@ -11,6 +11,7 @@ public class CreateDebtEvent {
     public static final short DEBT_CREATED = 0x01;
     public static final short DEBT_CREATION_ERROR = 0x02;
     public static final short CONTACT_LIST_OK = 0x03;
+    public static final short DEBT_UPDATED = 0x04;
 
     private short status;
     private Debt debt;

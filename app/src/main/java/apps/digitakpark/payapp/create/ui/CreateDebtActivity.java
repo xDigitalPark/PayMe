@@ -34,6 +34,7 @@ import java.util.List;
 
 import apps.digitakpark.payapp.PaymeApplication;
 import apps.digitakpark.payapp.create.CreateDebtPresenter;
+import apps.digitakpark.payapp.create.CreateDebtPresenterImpl;
 import apps.digitakpark.payapp.create.adapters.ContactsArrayAdapter;
 import apps.digitakpark.payapp.events.CreateDebtEvent;
 import apps.digitakpark.payapp.model.Contact;
@@ -43,7 +44,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import payme.pe.apps.digitakpark.payme.R;
-import apps.digitakpark.payapp.create.CreateDebtPresenterImpl;
 
 public class CreateDebtActivity extends AppCompatActivity implements CreateDebtView {
 
@@ -72,9 +72,14 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
     ImageView activityCreateDebtDateClean;
     @BindView(R.id.activity_create_debt_limit_clean)
     ImageView activityCreateDebtLimitClean;
+    @BindView(R.id.activity_create_debt_search_contact)
+    ImageView activityCreateDebtSearchContact;
 
     boolean dateSelected = false;
     boolean dateLimitSelected = false;
+
+    boolean editionMode = false;
+    Double editPreTotal = 0D;
 
     private Debt debt = new Debt();
     private DebtHeader debtHeader = new DebtHeader();
@@ -98,7 +103,7 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateDateLabel();
+                updateDateLabel(myCalendar.getTimeInMillis());
             }
 
         };
@@ -109,7 +114,7 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
                 myLimitCalendar.set(Calendar.YEAR, year);
                 myLimitCalendar.set(Calendar.MONTH, monthOfYear);
                 myLimitCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLimitDateLabel();
+                updateLimitDateLabel(myLimitCalendar.getTimeInMillis());
             }
 
         };
@@ -148,7 +153,10 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_create_debt) {
-            createNewDebt();
+            if (!editionMode)
+                createNewDebt();
+            else
+                editDebt();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -166,6 +174,8 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
     @Override
     public void prepopActivity(Bundle extras) {
         boolean mine = extras.getBoolean("debt_mine");
+        editionMode = extras.getBoolean("debt_edit", false);
+
         if (mine) {
             activityCreateDebtMine.setChecked(true);
         } else {
@@ -179,12 +189,43 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
             this.debtHeader.setNumber(number);
             this.debtHeader.setName(name);
         }
+
+        if (editionMode) {
+            setTitle(getString(R.string.create_deb_activity_title_edit));
+            disableInputsToEdit();
+            debt.setId(extras.getLong("debt_id"));
+            editPreTotal = extras.getDouble("debt_total");
+            String concept = extras.getString("debt_concept");
+            Long date = extras.getLong("debt_date");
+            Long limit = extras.getLong("debt_limit");
+            updateDateLabel(date);
+            if (limit != 0)
+                updateLimitDateLabel(limit);
+            this.activityCreateDebtTotal.setText(editPreTotal.toString());
+            this.activityCreateDebtConcept.setText(concept);
+        }
+    }
+
+    @Override
+    public void disableInputsToEdit() {
+        usernameTextView.setEnabled(false);
+        activityCreateDebtMine.setEnabled(false);
+        activityCreateDebtNotMine.setEnabled(false);
+        activityCreateDebtSearchContact.setVisibility(View.GONE);
+
     }
 
     @Override
     public void createNewDebt() {
         if (validateViewForm()) {
             presenter.sendNewDebtCreationAction(this.debtHeader, this.debt);
+        }
+    }
+
+    @Override
+    public void editDebt() {
+        if (validateViewForm() == true) {
+            presenter.sendEditDebtAction(this.debtHeader, this.debt, editPreTotal);
         }
     }
 
@@ -329,7 +370,7 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
         }
     }
 
-    @OnClick(R.id.activity_create_debt_avatar)
+    @OnClick(R.id.activity_create_debt_search_contact)
     @Override
     public void showPickContactActivity() {
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
@@ -337,9 +378,9 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
     }
 
     @Override
-    public void updateDateLabel() {
+    public void updateDateLabel(Long milis) {
         dateSelected = true;
-        dateTextView.setText("Fecha | " + PaymeApplication.getFormatters().formatDate(myCalendar.getTimeInMillis()));
+        dateTextView.setText("Fecha | " + PaymeApplication.getFormatters().formatDate(milis));
         dateTextView.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
         activityCreateDebtDateClean.setVisibility(View.VISIBLE);
     }
@@ -352,12 +393,13 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
         dateTextView.setText("Fecha | Hoy");
     }
 
-    public void updateLimitDateLabel() {
+    public void updateLimitDateLabel(Long milis) {
         dateLimitSelected = true;
-        activityCreateDebtLimitDate.setText("Vence | " + PaymeApplication.getFormatters().formatDate(myLimitCalendar.getTimeInMillis()));
+        activityCreateDebtLimitDate.setText("Vence | " + PaymeApplication.getFormatters().formatDate(milis));
         activityCreateDebtLimitDate.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
         activityCreateDebtLimitClean.setVisibility(View.VISIBLE);
     }
+
     @OnClick(R.id.activity_create_debt_limit_clean)
     public void cleanLimitDateLabel() {
         dateLimitSelected = false;
@@ -398,5 +440,10 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
                 nullateContactInfo();
             }
         });
+    }
+
+    @Override
+    public void onDebtUpdated() {
+        finish();
     }
 }

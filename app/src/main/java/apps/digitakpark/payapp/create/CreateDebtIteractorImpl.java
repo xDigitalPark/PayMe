@@ -23,6 +23,11 @@ public class CreateDebtIteractorImpl implements CreateDebtIteractor {
     }
 
     @Override
+    public void doEditDebt(DebtHeader debtHeader, Debt debt, Double editPreTotal) {
+        repository.editDebt(debtHeader, debt, editPreTotal);
+    }
+
+    @Override
     public void doRetrieveContactList() {
         contactRepository.getContacts();
     }
