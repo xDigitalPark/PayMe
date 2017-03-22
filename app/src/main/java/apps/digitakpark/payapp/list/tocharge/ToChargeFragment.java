@@ -15,7 +15,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import apps.digitakpark.payapp.detail.ui.DebtDetailActivity;
 import apps.digitakpark.payapp.detail.ui.DebtDetailedActivity;
 import apps.digitakpark.payapp.list.DividerItemDecorator;
 import apps.digitakpark.payapp.list.adapters.ToChargeFragmentAdapter;
