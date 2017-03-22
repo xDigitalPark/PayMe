@@ -29,14 +29,23 @@
         <activity android:name="apps.digitakpark.payapp.password.PasswordActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name="apps.digitakpark.payapp.preferences.PreferencesActivity"
             android:label="@string/title_activity_settings"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="apps.digitakpark.payapp.detail.ui.DebtDetailedActivity"
+            android:label="@string/title_activity_debt_detailed"
+            android:parentActivityName="apps.digitakpark.payapp.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="apps.digitakpark.payapp.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import apps.digitakpark.payapp.detail.ui.DebtDetailActivity;
+import apps.digitakpark.payapp.detail.ui.DebtDetailedActivity;
 import apps.digitakpark.payapp.list.DividerItemDecorator;
 import apps.digitakpark.payapp.list.adapters.ToChargeFragmentAdapter;
 import apps.digitakpark.payapp.list.common.ui.OnClickDebtHeaderListener;
@@ -28,6 +29,8 @@ import apps.digitakpark.payapp.list.common.ui.ListDebtView;
 
 public class ToChargeFragment extends Fragment implements ListDebtView, OnClickDebtHeaderListener {
 
+    @BindView(R.id.fragment_to_charge_count)
+    TextView fragmentToChargeCount;
     @BindView(R.id.fragment_tocharge_recyclerview)
     RecyclerView recyclerView;
     @BindView(R.id.fragment_to_charge_total)
@@ -70,7 +73,7 @@ public class ToChargeFragment extends Fragment implements ListDebtView, OnClickD
 
     @Override
     public void onClick(DebtHeader debtHeader) {
-        Intent intent = new Intent(getActivity(), DebtDetailActivity.class);
+        Intent intent = new Intent(getActivity(), DebtDetailedActivity.class);
         intent.putExtra("debt_name", debtHeader.getName());
         intent.putExtra("debt_number", debtHeader.getNumber());
         intent.putExtra("debt_mine", debtHeader.isMine());
@@ -80,6 +83,11 @@ public class ToChargeFragment extends Fragment implements ListDebtView, OnClickD
     @Override
     public void onLoadDebtHeaderList(List<DebtHeader> debtHeaderList) {
         adapter.changeDataSet(debtHeaderList);
+        if (debtHeaderList.size() != 1) {
+            fragmentToChargeCount.setText(debtHeaderList.size() + " Registros");
+        } else {
+            fragmentToChargeCount.setText(debtHeaderList.size() + " Registro");
+        }
     }
 
     @Override
