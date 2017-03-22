@@ -1,24 +1,21 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="apps.digitakpark.payapp.detail.ui.DebtDetailedActivity"
+    tools:showIn="@layout/activity_debt_detailed"
     android:background="@color/listBackground">
 
-
-    <android.support.design.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="false">
-
-    </android.support.design.widget.CoordinatorLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/fragment_to_charge_detail"
+            android:id="@+id/activity_debt_detailed_detail"
             android:layout_width="match_parent"
             android:layout_height="@dimen/common_bottom_bar_size_details"
             android:layout_alignParentLeft="true"
@@ -33,19 +30,8 @@
             android:paddingTop="@dimen/debt_total_padding">
 
             <TextView
-                android:id="@+id/fragment_to_charge_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="left"
-                android:layout_weight="1"
-                android:text="5 Registros"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/fragment_to_charge_total"
-                android:layout_width="wrap_content"
+                android:id="@+id/activity_debt_detailed_total"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
                 android:gravity="left"
@@ -55,16 +41,16 @@
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/fragment_tocharge_recyclerview"
+            android:id="@+id/activity_debt_detailed_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/fragment_to_charge_detail"
+            android:layout_below="@+id/activity_debt_detailed_detail"
             android:scrollbars="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </RelativeLayout>
 
 
-</FrameLayout>
+</android.support.v4.widget.NestedScrollView>

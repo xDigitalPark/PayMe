@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,9 +21,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import payme.pe.apps.digitakpark.payme.R;
 import apps.digitakpark.payapp.create.ui.CreateDebtActivity;
 import apps.digitakpark.payapp.detail.DebtDetailPresenter;
 import apps.digitakpark.payapp.detail.DebtDetailPresenterImpl;
@@ -30,30 +28,35 @@ import apps.digitakpark.payapp.detail.adapters.DebtDetailActivityAdapter;
 import apps.digitakpark.payapp.list.DividerItemDecorator;
 import apps.digitakpark.payapp.model.Debt;
 import apps.digitakpark.payapp.model.DebtHeader;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import payme.pe.apps.digitakpark.payme.R;
 
-public class DebtDetailActivity extends AppCompatActivity implements DebtDetailView {
+public class DebtDetailedActivity extends AppCompatActivity implements DebtDetailView {
 
-    @BindView(R.id.activity_debt_detail_recyclerview)
+    @BindView(R.id.activity_debt_detailed_total)
+    TextView activityDebtDetailedTotal;
+    @BindView(R.id.activity_debt_detailed_recyclerview)
     RecyclerView recyclerView;
-    DebtDetailActivityAdapter adapter;
-    List<Debt> debtList = new ArrayList<>();
-    @BindView(R.id.activity_debt_detail_total)
-    TextView activityDebtDetailTotal;
-    private Double total;
     private String number;
     private String name;
     private Debt debt;
     private boolean mine;
+    List<Debt> debtList = new ArrayList<>();
     private DebtDetailPresenter presenter;
-    private FloatingActionButton fab;
+    DebtDetailActivityAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_debt_detail);
+        setContentView(R.layout.activity_debt_detailed);
         ButterKnife.bind(this);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         Bundle extras = getIntent().getExtras();
         prepopActivity(extras);
+
         this.adapter = new DebtDetailActivityAdapter(this.debtList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.addItemDecoration(new DividerItemDecorator(this, DividerItemDecorator.VERTICAL_LIST));
@@ -61,16 +64,18 @@ public class DebtDetailActivity extends AppCompatActivity implements DebtDetailV
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        fab = (FloatingActionButton) findViewById(R.id.activity_debt_detail_fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.activity_debt_detailed_add_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 navigateToCreateDebtActivity(mine);
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
-
-        this.presenter = new DebtDetailPresenterImpl(this);
-        this.presenter.onCreate();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        presenter = new DebtDetailPresenterImpl(this);
+        presenter.onCreate();
     }
 
     @Override
@@ -78,6 +83,14 @@ public class DebtDetailActivity extends AppCompatActivity implements DebtDetailV
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_debt_detail, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_debt_detail_call) {
+            callToNumber(this.debt.getNumber());
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -109,17 +122,20 @@ public class DebtDetailActivity extends AppCompatActivity implements DebtDetailV
     }
 
     @Override
+    public void onLoadTotal(Double total) {
+        String title = mine?getString(R.string.activity_debt_detailed_ledebo):
+                getString(R.string.activity_debt_detailed_medebe);
+
+        activityDebtDetailedTotal.setText(title + "   |   S/. " + total);
+    }
+
+    @Override
     public void navigateToCreateDebtActivity(boolean mine) {
         Intent intent = new Intent(getApplicationContext(), CreateDebtActivity.class);
         intent.putExtra("debt_mine", mine);
         intent.putExtra("debt_number", number);
         intent.putExtra("debt_name", name);
         startActivity(intent);
-    }
-
-    @Override
-    public void onLoadTotal(Double total) {
-        activityDebtDetailTotal.setText("Total: S/." + total);
     }
 
     @Override
@@ -144,14 +160,6 @@ public class DebtDetailActivity extends AppCompatActivity implements DebtDetailV
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_debt_detail_call) {
-            callToNumber(this.debt.getNumber());
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onCloseDebtOptionSelected(Debt debt) {
         presenter.sendCloseDebtAction(debt);
     }
@@ -162,8 +170,22 @@ public class DebtDetailActivity extends AppCompatActivity implements DebtDetailV
     }
 
     @Override
+    public void onEditDebtOptionSelected(Debt debt) {
+        Intent intent = new Intent(getApplicationContext(), CreateDebtActivity.class);
+        intent.putExtra("debt_id", debt.getId());
+        intent.putExtra("debt_mine", mine);
+        intent.putExtra("debt_number", number);
+        intent.putExtra("debt_name", name);
+        intent.putExtra("debt_edit", true);
+        intent.putExtra("debt_total", debt.getTotal());
+        intent.putExtra("debt_concept", debt.getConcept());
+        intent.putExtra("debt_date", debt.getDate());
+        intent.putExtra("debt_limit", debt.getLimit());
+        startActivity(intent);
+    }
+
+    @Override
     public void onDebtDeleted(Long id) {
-        // to reduce total
         adapter.removeItem(id);
         presenter.sendRetrieveDebtsAction(debt.getNumber(), debt.isMine());
         Double total = adapter.getTotal();
@@ -183,25 +205,10 @@ public class DebtDetailActivity extends AppCompatActivity implements DebtDetailV
     @Override
     public void callToNumber(String number) {
         Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:"+number));
+        callIntent.setData(Uri.parse("tel:" + number));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         startActivity(callIntent);
-    }
-
-    @Override
-    public void onEditDebtOptionSelected(Debt debt) {
-        Intent intent = new Intent(getApplicationContext(), CreateDebtActivity.class);
-        intent.putExtra("debt_id", debt.getId());
-        intent.putExtra("debt_mine", mine);
-        intent.putExtra("debt_number", number);
-        intent.putExtra("debt_name", name);
-        intent.putExtra("debt_edit", true);
-        intent.putExtra("debt_total", debt.getTotal());
-        intent.putExtra("debt_concept", debt.getConcept());
-        intent.putExtra("debt_date", debt.getDate());
-        intent.putExtra("debt_limit", debt.getLimit());
-        startActivity(intent);
     }
 }

@@ -32,11 +32,22 @@
         android:paddingTop="@dimen/debt_total_padding">
 
         <TextView
-            android:id="@+id/fragment_to_pay_total"
-            android:layout_width="match_parent"
+            android:id="@+id/fragment_to_pay_count"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
-            android:gravity="center"
+            android:gravity="left"
+            android:layout_weight="1"
+            android:text="5 Registros"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/fragment_to_pay_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="right"
             android:text="Small Text"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textStyle="bold" />
