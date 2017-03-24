@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import apps.digitakpark.payapp.PaymeApplication;
 import payme.pe.apps.digitakpark.payme.R;
 import apps.digitakpark.payapp.model.Balance;
 
@@ -29,9 +30,10 @@ public class BalanceFragmentAdapter extends RecyclerView.Adapter<BalanceViewHold
     public void onBindViewHolder(BalanceViewHolder holder, int position) {
         final Balance balance = this.balanceList.get(position);
         holder.nameEditText.setText(balance.getName());
-        holder.totalEditText.setText(balance.getCurrency() + " " + balance.getTotal());
-        holder.myTotalText.setText(balance.getCurrency() + " " + balance.getPartyTotal());
-        holder.partyTotalText.setText("   -   " + balance.getCurrency() + " " + balance.getMyTotal());
+        String totalFmt = PaymeApplication.getFormatters().formatMoney(balance.getMyTotal());
+        holder.totalEditText.setText(balance.getCurrency() + " " + totalFmt);
+        holder.myTotalText.setText(balance.getCurrency() + " " + PaymeApplication.getFormatters().formatMoney(balance.getPartyTotal()));
+        holder.partyTotalText.setText("   -   " + balance.getCurrency() + " " + totalFmt);
         if (balance.getTotal() < 0) {
             holder.totalEditText.setTextColor(holder.view.getResources().getColor(R.color.negativeDebt));
         } else {

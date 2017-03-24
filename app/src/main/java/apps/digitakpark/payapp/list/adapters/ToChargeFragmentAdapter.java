@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import apps.digitakpark.payapp.PaymeApplication;
 import apps.digitakpark.payapp.list.common.ui.OnClickDebtHeaderListener;
 import apps.digitakpark.payapp.model.DebtHeader;
 import payme.pe.apps.digitakpark.payme.R;
@@ -31,8 +32,9 @@ public class ToChargeFragmentAdapter extends RecyclerView.Adapter<ToChargeViewHo
     @Override
     public void onBindViewHolder(ToChargeViewHolder holder, int position) {
         final DebtHeader debtHeader = this.debtHeaderList.get(position);
+        String totalFmt = PaymeApplication.getFormatters().formatMoney(debtHeader.getTotal());
         holder.nameEditText.setText(debtHeader.getName());
-        holder.totalEditText.setText(debtHeader.getCurrency() + " " + debtHeader.getTotal());
+        holder.totalEditText.setText(debtHeader.getCurrency() + " " + totalFmt);
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

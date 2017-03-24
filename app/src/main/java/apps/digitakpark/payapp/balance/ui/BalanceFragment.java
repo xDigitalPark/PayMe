@@ -14,6 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import apps.digitakpark.payapp.PaymeApplication;
 import apps.digitakpark.payapp.balance.BalancePresenter;
 import apps.digitakpark.payapp.balance.adapters.BalanceFragmentAdapter;
 import apps.digitakpark.payapp.balance.listeners.OnTabSelectedListener;
@@ -75,7 +76,8 @@ public class BalanceFragment extends Fragment implements BalanceView, OnTabSelec
 
     @Override
     public void onLoadTotal(Double total) {
-        fragmentBalanceDetailTotal.setText("Total   |   S/. " + total);
+        String totalFmt = PaymeApplication.getFormatters().formatMoney(total);
+        fragmentBalanceDetailTotal.setText("Total   |   S/. " + totalFmt);
         if (total < 0)
             fragmentBalanceDetailTotal.setTextColor(getResources().getColor(R.color.negativeDebt));
         else

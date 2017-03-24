@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import apps.digitakpark.payapp.PaymeApplication;
 import apps.digitakpark.payapp.balance.listeners.OnTabSelectedListener;
 import apps.digitakpark.payapp.detail.ui.DebtDetailedActivity;
 import apps.digitakpark.payapp.list.DividerItemDecorator;
@@ -91,7 +92,8 @@ public class ToPayFragment extends Fragment implements ListDebtView, OnClickDebt
 
     @Override
     public void onLoadTotal(Double total) {
-        fragmentToPayTotal.setText("Total   |   S/. " + total);
+        String totalFmt = PaymeApplication.getFormatters().formatMoney(total);
+        fragmentToPayTotal.setText("Total   |   S/. " + totalFmt);
 
     }
 

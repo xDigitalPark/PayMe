@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import apps.digitakpark.payapp.PaymeApplication;
 import apps.digitakpark.payapp.detail.ui.DebtDetailedActivity;
 import apps.digitakpark.payapp.list.DividerItemDecorator;
 import apps.digitakpark.payapp.list.adapters.ToChargeFragmentAdapter;
@@ -91,7 +92,8 @@ public class ToChargeFragment extends Fragment implements ListDebtView, OnClickD
 
     @Override
     public void onLoadTotal(Double total) {
-        fragmentToChargeTotal.setText("Total   |   S/. " + total);
+        String totalFmt = PaymeApplication.getFormatters().formatMoney(total);
+        fragmentToChargeTotal.setText("Total   |   S/. " + totalFmt);
     }
 
     @Override

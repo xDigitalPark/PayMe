@@ -2,6 +2,7 @@ package apps.digitakpark.payapp.utils;
 
 import android.content.Context;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -9,6 +10,8 @@ import payme.pe.apps.digitakpark.payme.R;
 
 public class Formatters {
     private Context context;
+    DecimalFormat moneyFormat = new DecimalFormat("#.00");
+
     public Formatters(Context context) {
         this.context = context;
     }
@@ -23,6 +26,10 @@ public class Formatters {
         String year_str = ("" + year).substring(2);
         String dateText = day_str + " - " + getMonth(cal.get(Calendar.MONTH)) + " - " + year_str;
         return dateText;
+    }
+
+    public String formatMoney(Double amount) {
+        return moneyFormat.format(amount);
     }
 
     private String getMonth(int month) {

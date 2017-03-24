@@ -31,8 +31,9 @@ public class DebtDetailActivityAdapter extends RecyclerView.Adapter<DetailViewHo
     public void onBindViewHolder(DetailViewHolder holder, int position) {
         final Debt debt = this.debtList.get(position);
         String date = PaymeApplication.getFormatters().formatDate(debt.getDate());
+        String totalFmt = PaymeApplication.getFormatters().formatMoney(debt.getTotal());
         holder.conceptEditText.setText(debt.getConcept());
-        holder.totalEditText.setText(debt.getCurrency() + " " + debt.getTotal());
+        holder.totalEditText.setText(debt.getCurrency() + " " + totalFmt);
         holder.dateTextView.setText(date);
         if (debt.getLimit() != null && debt.getLimit() != 0) {
             holder.limitDateTextView.setText(PaymeApplication.getFormatters().formatDate(debt.getLimit()));
