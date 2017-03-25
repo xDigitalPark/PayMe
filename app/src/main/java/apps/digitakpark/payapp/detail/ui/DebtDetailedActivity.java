@@ -102,22 +102,32 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
         if (item.getItemId() == R.id.action_debt_detail_call) {
             callToNumber(this.debt.getNumber());
         } else if(item.getItemId() == R.id.action_debt_detail_link) {
-            // Show alert before transfer
-            AlertDialog.Builder builder =
-                    new AlertDialog.Builder(this);
-            builder.setTitle("Transferir Cuenta?");
-            builder.setMessage("Transfiere esta cuenta a otro contacto.");
-            builder.setPositiveButton("Transferir", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    showPickContactActivity();
-                }
-            });
-            builder.setNegativeButton("Cancelar", null);
-            builder.show();
+            showPickContactActivity();
+        } else if(item.getItemId() == R.id.action_debt_detail_share) {
+            showShareAction();
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
+    public  void showShareAction() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("Lista de Deudas: \n*total:  S/.%s*\n", adapter.getTotal()));
+        sb.append("-------------------------------\n");
+        int i = 1;
+        for(Debt debt: this.adapter.getDebtList()) {
+            sb.append(String.format("*%d:* %s. *%s%s*\n", i++, debt.getConcept(), debt.getCurrency(), debt.getTotal()));
+        }
+        sb.append("-------------------------------\n");
+        sb.append("_Generado con *Pay2Me*_.\n_Encuentrala en PlayStore._\n");
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, sb.toString());
+        startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.activity_debt_detail_share_menu_title)));
+    }
+
 
     @Override
     protected void onStart() {
@@ -271,8 +281,20 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
 
     @Override
     public void showPickContactActivity() {
-        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        startActivityForResult(intent, PICK_CONTACT_TO_LINK);
+        // Show alert before transfer
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(this);
+        builder.setTitle("Transferir Cuenta?");
+        builder.setMessage("Transfiere esta cuenta a otro contacto.");
+        builder.setPositiveButton("Transferir", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                startActivityForResult(intent, PICK_CONTACT_TO_LINK);
+            }
+        });
+        builder.setNegativeButton("Cancelar", null);
+        builder.show();
     }
 
     @Override

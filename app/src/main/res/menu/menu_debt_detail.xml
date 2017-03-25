@@ -5,7 +5,12 @@
         android:id="@+id/action_debt_detail_link"
         android:icon="@android:drawable/ic_menu_myplaces"
         app:showAsAction="always"
-        android:title="@string/activity_debt_detail_call_menu_title" />
+        android:title="@string/activity_debt_detail_link_menu_title" />
+    <item
+        android:id="@+id/action_debt_detail_share"
+        android:icon="@android:drawable/ic_menu_share"
+        app:showAsAction="always"
+        android:title="@string/activity_debt_detail_share_menu_title" />
     <item
         android:id="@+id/action_debt_detail_call"
         android:icon="@android:drawable/ic_menu_call"

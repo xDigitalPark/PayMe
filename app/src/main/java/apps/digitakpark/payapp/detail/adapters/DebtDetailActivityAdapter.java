@@ -86,4 +86,8 @@ public class DebtDetailActivityAdapter extends RecyclerView.Adapter<DetailViewHo
         return total;
     }
 
+    public List<Debt> getDebtList() {
+        return this.debtList;
+    }
+
 }
