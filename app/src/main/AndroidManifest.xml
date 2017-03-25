@@ -42,6 +42,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="apps.digitakpark.payapp.MainActivity" />
         </activity>
+        <activity
+            android:name="apps.digitakpark.payapp.contacts.ContactsActivity"
+            android:label="@string/title_contacts"
+            android:parentActivityName="apps.digitakpark.payapp.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="apps.digitakpark.payapp.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

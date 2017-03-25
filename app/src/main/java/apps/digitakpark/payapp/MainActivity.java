@@ -18,6 +18,7 @@ import android.view.View;
 
 import apps.digitakpark.payapp.balance.listeners.OnTabSelectedListener;
 import apps.digitakpark.payapp.balance.ui.BalanceFragment;
+import apps.digitakpark.payapp.contacts.ContactsActivity;
 import apps.digitakpark.payapp.create.ui.CreateDebtActivity;
 import apps.digitakpark.payapp.list.tocharge.ToChargeFragment;
 import apps.digitakpark.payapp.preferences.PreferencesActivity;
@@ -102,17 +103,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-//        if (id == R.id.action_settings) {
-//            return true;
-//        } else
+
         if(id == R.id.action_about_app) {
             Snackbar.make(mViewPager, "Coded by Erikson Murrugarra. DigitalPark, PE", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         } else if (id == R.id.action_settings) {
             navigateToSettingsActivity();
             return true;
+        } else if(id == R.id.action_contacts) {
+            navigateToContactsActivity();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void navigateToContactsActivity() {
+        Intent intent = new Intent(this, ContactsActivity.class);
+        startActivity(intent);
     }
 
     public void navigateToSettingsActivity() {
