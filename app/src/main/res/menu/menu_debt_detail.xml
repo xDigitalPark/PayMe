@@ -2,8 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_debt_detail_link"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        app:showAsAction="always"
+        android:title="@string/activity_debt_detail_call_menu_title" />
+    <item
         android:id="@+id/action_debt_detail_call"
         android:icon="@android:drawable/ic_menu_call"
-        app:showAsAction="always"
-        android:title="@string/activity_create_debt_save_menu_title" />
+        android:title="@string/activity_debt_detail_call_menu_title" />
 </menu>

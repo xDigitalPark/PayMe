@@ -52,6 +52,9 @@ public class DebtDetailPresenterImpl implements DebtDetailPresenter {
             case DebtDetailEvent.DEBT_HEADER_DELETED_OK:
                 view.onDebtHeaderDeleted();
                 break;
+            case DebtDetailEvent.DEBT_DETAIL_RELINKED_OK:
+                view.updateContactInfo(event.getData());
+                break;
         }
     }
 
@@ -68,5 +71,10 @@ public class DebtDetailPresenterImpl implements DebtDetailPresenter {
     @Override
     public void sendDeleteDetHeaderAction(DebtHeader debtHeader) {
         iteractor.doDeleteDebtHeader(debtHeader);
+    }
+
+    @Override
+    public void sendChangeContactLink(String currentNumber, boolean mine, String number, String name) {
+        iteractor.doChangeContactLink(currentNumber, mine, number, name);
     }
 }

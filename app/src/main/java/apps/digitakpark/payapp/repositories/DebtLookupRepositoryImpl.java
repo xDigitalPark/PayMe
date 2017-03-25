@@ -70,8 +70,17 @@ public class DebtLookupRepositoryImpl implements DebtLookupRepository {
 
     @Override
     public Contact lookupContact(String number) {
+        return getContact(DatabaseAdapter.CONTACT_NUMBER, number);
+    }
+
+    @Override
+    public Contact lookupContact(String criteria, String value) {
+        return getContact(criteria, value);
+    }
+
+    private Contact getContact(String criteria, String value) {
         String query = "SELECT id, number, name FROM " + DatabaseAdapter.CONTACT_TABLE +
-                " WHERE number = '" + number + "'";
+                " WHERE UPPER(" + criteria + ") = UPPER('" + value + "')";
 
         Cursor cursor = database.retrieveData(query);
         if (cursor != null) {

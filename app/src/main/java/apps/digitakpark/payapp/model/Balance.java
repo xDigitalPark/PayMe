@@ -87,4 +87,8 @@ public class Balance {
         return this.number.equals(balance.getNumber());
     }
 
+    public void computeTotal() {
+        this.total = this.partyTotal - this.myTotal;
+    }
+
 }

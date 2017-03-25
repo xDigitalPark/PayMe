@@ -8,6 +8,7 @@ public interface DebtDetailPresenter {
     void onCreate();
     void onDestroy();
     void sendRetrieveDebtsAction(String number, boolean mine);
+    void sendChangeContactLink(String currentNumber, boolean mine, String number, String name);
     void sendCloseDebtAction(Debt debt);
     void sendDeleteDebtAction(Debt debt);
     void sendDeleteDetHeaderAction(DebtHeader debtHeader);

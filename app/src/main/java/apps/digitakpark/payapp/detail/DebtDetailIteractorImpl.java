@@ -37,4 +37,9 @@ public class DebtDetailIteractorImpl implements  DebtDetailIteractor {
     public void doDeleteDebtHeader(DebtHeader debtHeader) {
         debtRepository.deleteDebtHeader(debtHeader, false, true);
     }
+
+    @Override
+    public void doChangeContactLink(String currentNumber, boolean mine, String number, String name) {
+        debtRepository.changeDebtContactLink(currentNumber, mine, number, name);
+    }
 }

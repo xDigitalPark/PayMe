@@ -10,7 +10,7 @@ import payme.pe.apps.digitakpark.payme.R;
 
 public class Formatters {
     private Context context;
-    DecimalFormat moneyFormat = new DecimalFormat("#.00");
+    DecimalFormat moneyFormat = new DecimalFormat("#.0");
 
     public Formatters(Context context) {
         this.context = context;
@@ -29,7 +29,10 @@ public class Formatters {
     }
 
     public String formatMoney(Double amount) {
-        return moneyFormat.format(amount);
+        if (amount == 0D)
+            return "0.0";
+        else
+            return String.format( "%.2f", amount);
     }
 
     private String getMonth(int month) {

@@ -27,13 +27,21 @@ public class CreateDebtRepositoryImpl implements CreateDebtRepository {
 
     @Override
     public void createDebt(DebtHeader debtHeader, Debt debt) {
+        // Modify contact base on the Contact Name
+//        Contact contact = debtLookupRepository.lookupContact(DatabaseAdapter.CONTACT_NAME, debtHeader.getName());
+//        if (contact != null) {
+//            debtHeader.setName(contact.getName());
+//            debtHeader.setNumber(contact.getNumber());
+//            debt.setNumber(contact.getNumber());
+//        }
+        // Create Debt
         boolean debtHeaderAdded = createDebtHeader(debtHeader),
                 debtAdded = createDebt(debt),
                 balanceAdded = createBalance(debtHeader, debt),
                 contactUpserted = upsertContact(debtHeader);
         if(debtHeaderAdded && debtAdded && balanceAdded && contactUpserted) {
             CreateDebtEvent event = new CreateDebtEvent();
-            event.setMessage("Header creado");
+            event.setMessage("Deuda creada");
             event.setDebt(debt);
             event.setDebtHeader(debtHeader);
             event.setStatus(CreateDebtEvent.DEBT_CREATED);

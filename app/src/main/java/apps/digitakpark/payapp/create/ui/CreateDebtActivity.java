@@ -77,7 +77,7 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
 
     boolean dateSelected = false;
     boolean dateLimitSelected = false;
-
+    boolean contactPickedAction = false;
     boolean editionMode = false;
     Double editPreTotal = 0D;
 
@@ -201,7 +201,8 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
             updateDateLabel(date);
             if (limit != 0)
                 updateLimitDateLabel(limit);
-            this.activityCreateDebtTotal.setText(editPreTotal.toString());
+            String totalFmt = PaymeApplication.getFormatters().formatMoney(editPreTotal);
+            this.activityCreateDebtTotal.setText(totalFmt);
             this.activityCreateDebtConcept.setText(concept);
         }
     }
@@ -317,6 +318,7 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
 
     @Override
     public void updateContactInfo(String number, String name) {
+        contactPickedAction = true;
         debt.setNumber(number);
         debtHeader.setNumber(number);
         debtHeader.setName(name);
@@ -333,6 +335,7 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
     @OnClick(R.id.activity_create_debt_date)
     @Override
     public void showDatePickerDialog() {
+        contactPickedAction = true;
         new DatePickerDialog(CreateDebtActivity.this, datePickerListener,
                 myCalendar.get(Calendar.YEAR),
                 myCalendar.get(Calendar.MONTH),
@@ -437,7 +440,10 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
 
             @Override
             public void afterTextChanged(Editable editable) {
-                nullateContactInfo();
+                if (!contactPickedAction)
+                    nullateContactInfo();
+                else
+                    contactPickedAction = false;
             }
         });
     }

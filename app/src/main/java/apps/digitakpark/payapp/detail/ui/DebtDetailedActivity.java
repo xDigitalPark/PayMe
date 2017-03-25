@@ -1,11 +1,16 @@
 package apps.digitakpark.payapp.detail.ui;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,6 +25,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import apps.digitakpark.payapp.create.ui.CreateDebtActivity;
 import apps.digitakpark.payapp.detail.DebtDetailPresenter;
@@ -32,12 +38,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import payme.pe.apps.digitakpark.payme.R;
 
+import android.support.v7.app.AlertDialog;
+
 public class DebtDetailedActivity extends AppCompatActivity implements DebtDetailView {
+
+    public static final int PICK_CONTACT_TO_LINK = 1002;
 
     @BindView(R.id.activity_debt_detailed_total)
     TextView activityDebtDetailedTotal;
     @BindView(R.id.activity_debt_detailed_recyclerview)
     RecyclerView recyclerView;
+    @BindView(R.id.activity_debt_detail_layout)
+    View view;
     private String number;
     private String name;
     private Debt debt;
@@ -89,6 +101,20 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_debt_detail_call) {
             callToNumber(this.debt.getNumber());
+        } else if(item.getItemId() == R.id.action_debt_detail_link) {
+            // Show alert before transfer
+            AlertDialog.Builder builder =
+                    new AlertDialog.Builder(this);
+            builder.setTitle("Transferir Cuenta?");
+            builder.setMessage("Transfiere esta cuenta a otro contacto.");
+            builder.setPositiveButton("Transferir", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    showPickContactActivity();
+                }
+            });
+            builder.setNegativeButton("Cancelar", null);
+            builder.show();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -185,6 +211,16 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK)
+            return;
+        switch (requestCode) {
+            case PICK_CONTACT_TO_LINK:
+                onPickedContact(data.getData());
+        }
+    }
+
+    @Override
     public void onDebtDeleted(Long id) {
         adapter.removeItem(id);
         presenter.sendRetrieveDebtsAction(debt.getNumber(), debt.isMine());
@@ -210,5 +246,43 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
             return;
         }
         startActivity(callIntent);
+    }
+
+    @Override
+    public void onPickedContact(Uri contactData) {
+        if (contactData != null) {
+            Cursor c = managedQuery(contactData, null, null, null, null);
+            if (c.moveToFirst()) {
+                String id = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+                String hasPhone = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                if (hasPhone.equalsIgnoreCase("1")) {
+                    Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, null, null);
+                    phones.moveToFirst();
+                    String num = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    String name = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
+                    presenter.sendChangeContactLink(number, mine, num, name);
+                } else {
+                    showMessage(getString(R.string.create_debt_activity_invalid_contact_selection));
+                }
+            }
+        }
+    }
+
+    @Override
+    public void showPickContactActivity() {
+        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        startActivityForResult(intent, PICK_CONTACT_TO_LINK);
+    }
+
+    @Override
+    public void updateContactInfo(Map<String, String> data) {
+        finish();
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 }

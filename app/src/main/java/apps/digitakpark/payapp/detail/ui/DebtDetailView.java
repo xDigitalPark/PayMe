@@ -1,8 +1,11 @@
 package apps.digitakpark.payapp.detail.ui;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 
 import java.util.List;
+import java.util.Map;
 
 import apps.digitakpark.payapp.model.Debt;
 
@@ -23,4 +26,8 @@ public interface DebtDetailView {
     void onDebtDeleted(Long id);
     void onDebtHeaderDeleted();
     void callToNumber(String number);
+    void onPickedContact(Uri contactData);
+    void showPickContactActivity();
+    void updateContactInfo(Map<String, String> data);
+    void showMessage(String message);
 }

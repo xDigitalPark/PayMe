@@ -2,6 +2,9 @@ package apps.digitakpark.payapp.repositories;
 
 import android.content.ContentValues;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import apps.digitakpark.payapp.PaymeApplication;
 import apps.digitakpark.payapp.events.DebtDetailEvent;
 import apps.digitakpark.payapp.lib.data.DatabaseAdapter;
@@ -87,5 +90,107 @@ public class DebtRepositoryImpl implements DebtRepository {
         return true;
     }
 
+    /**
+     *
+     * @param currentNumber: the actual number to be changed
+     * @param mine: is my debt?
+     * @param number: the new number
+     * @param name: the new name
+     */
+    @Override
+    public void changeDebtContactLink(String currentNumber, boolean mine, String number, String name) {
+        String tableDebtHeader = !mine?DatabaseAdapter.DEBT_HEADER_TABLE_TOCHARGE:DatabaseAdapter.DEBT_HEADER_TABLE_TOPAY;
+        String tableDebt = !mine?DatabaseAdapter.DEBT_TABLE_TOCHARGE:DatabaseAdapter.DEBT_TABLE_TOPAY;
+        boolean debtFound = false;
+        ContentValues data = null;
+        // Check if exists one registry with the given number
+        data = new ContentValues();
+        DebtHeader currentDebtHeader = lookupRepository.lookupDebtHeader(currentNumber, mine);
+        DebtHeader debtHeaderFound = lookupRepository.lookupDebtHeader(number, mine);
+        debtFound = debtHeaderFound != null;
+        Double existingDebtHeaderTotal = 0D;
 
+        if (debtFound == true) {
+            // Update Existing DebtHeader total
+            Double newTotal = debtHeaderFound.getTotal() + currentDebtHeader.getTotal();
+            debtHeaderFound.setTotal(newTotal);
+            data.put(DatabaseAdapter.DEBT_HEADER_TABLE_COL_TOTAL, newTotal);
+            existingDebtHeaderTotal = newTotal;
+        }
+        // Update DebtHeader
+        boolean debtHeaderUpdated = false,
+                debtUpdated = false,
+                balanceUpdated = false;
+        data.put(DatabaseAdapter.DEBT_HEADER_TABLE_COL_NUMBER, number);
+        data.put(DatabaseAdapter.DEBT_HEADER_TABLE_COL_NAME, name);
+        if (debtFound == true) {
+            // Update DebtHeader
+            debtHeaderUpdated = database.updateData(tableDebtHeader, data, "number = ?", number);
+            // Remove existing registry
+            boolean deleted = database.deleteData(tableDebtHeader, "number = ?", currentNumber);
+            if (!deleted) {
+                // FIXME: Raise error
+                debtHeaderUpdated = false;
+            }
+        } else {
+            // Update non existing header
+            debtHeaderUpdated = database.updateData(tableDebtHeader, data, "number = ?", currentNumber);
+        }
+
+        if (debtHeaderUpdated == true) {
+            // Update Debt
+            data = new ContentValues();
+            data.put(DatabaseAdapter.DEBT_TABLE_COL_NUMBER, number);
+            debtUpdated = database.updateData(tableDebt, data, "number = ?", currentNumber);
+        }
+
+        if (debtHeaderUpdated == true && debtUpdated == true) {
+            data = new ContentValues();
+            Balance balanceFound = lookupRepository.lookupBalance(number);
+            if (balanceFound != null) {
+                // Lookup Balance
+                Double debtHeaderTotal = currentDebtHeader.getTotal();
+                if (existingDebtHeaderTotal > 0)
+                    debtHeaderTotal = existingDebtHeaderTotal;
+                if (mine)
+                    balanceFound.setMyTotal(debtHeaderTotal);
+                else
+                    balanceFound.setPartyTotal(debtHeaderTotal);
+                balanceFound.computeTotal();
+                data.put(DatabaseAdapter.BALANCE_TABLE_COL_MY_TOTAL, balanceFound.getMyTotal());
+                data.put(DatabaseAdapter.BALANCE_TABLE_COL_PARTY_TOTAL, balanceFound.getPartyTotal());
+                data.put(DatabaseAdapter.BALANCE_TABLE_COL_TOTAL, balanceFound.getTotal());
+            }
+            // Update Balance
+            data.put(DatabaseAdapter.BALANCE_TABLE_COL_NUMBER, number);
+            data.put(DatabaseAdapter.BALANCE_TABLE_COL_NAME, name);
+
+
+
+            if (balanceFound != null) {
+                // Check if delete
+                DebtHeader reverseDebtHeaderFound = lookupRepository.lookupDebtHeader(currentNumber, !mine);
+                if (reverseDebtHeaderFound == null)
+                    balanceUpdated = database.deleteData(DatabaseAdapter.BALANCE_TABLE, "number = ?", currentNumber);
+
+                balanceUpdated = database.updateData(DatabaseAdapter.BALANCE_TABLE, data, "number = ?", number);
+
+            } else {
+                balanceUpdated = database.updateData(DatabaseAdapter.BALANCE_TABLE, data, "number = ?", currentNumber);
+            }
+
+            if (balanceUpdated == true) {
+                // Send Event
+                Map<String, String> dataDet = new HashMap<>();
+                dataDet.put("name", name);
+                dataDet.put("number", number);
+                DebtDetailEvent event = new DebtDetailEvent();
+                event.setStatus(DebtDetailEvent.DEBT_DETAIL_RELINKED_OK);
+                event.setData(dataDet);
+                event.setMessage("OK");
+                eventBus.post(event);
+            }
+        }
+
+    }
 }

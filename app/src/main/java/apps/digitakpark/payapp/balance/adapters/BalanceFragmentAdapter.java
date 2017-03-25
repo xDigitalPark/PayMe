@@ -30,10 +30,13 @@ public class BalanceFragmentAdapter extends RecyclerView.Adapter<BalanceViewHold
     public void onBindViewHolder(BalanceViewHolder holder, int position) {
         final Balance balance = this.balanceList.get(position);
         holder.nameEditText.setText(balance.getName());
-        String totalFmt = PaymeApplication.getFormatters().formatMoney(balance.getMyTotal());
+        String myTotalFmt = PaymeApplication.getFormatters().formatMoney(balance.getMyTotal());
+        String partyTotalFmt = PaymeApplication.getFormatters().formatMoney(balance.getPartyTotal());
+        String totalFmt = PaymeApplication.getFormatters().formatMoney(balance.getTotal());
         holder.totalEditText.setText(balance.getCurrency() + " " + totalFmt);
-        holder.myTotalText.setText(balance.getCurrency() + " " + PaymeApplication.getFormatters().formatMoney(balance.getPartyTotal()));
-        holder.partyTotalText.setText("   -   " + balance.getCurrency() + " " + totalFmt);
+        holder.myTotalText.setText(balance.getCurrency() + " " + partyTotalFmt);
+        holder.partyTotalText.setText("   -   " + balance.getCurrency() + " " + myTotalFmt);
+        // Apply colors
         if (balance.getTotal() < 0) {
             holder.totalEditText.setTextColor(holder.view.getResources().getColor(R.color.negativeDebt));
         } else {

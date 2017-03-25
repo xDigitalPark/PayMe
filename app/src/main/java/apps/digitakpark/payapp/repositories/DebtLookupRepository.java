@@ -8,5 +8,7 @@ public interface DebtLookupRepository {
     DebtHeader lookupDebtHeader(String number, boolean mine);
     Balance lookupBalance(String number);
     Contact lookupContact(String number);
+    Contact lookupContact(String criteria, String value);
+
 
 }
