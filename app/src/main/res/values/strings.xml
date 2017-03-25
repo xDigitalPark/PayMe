@@ -16,7 +16,7 @@
     <string name="activity_create_debt_save_menu_title">Guardar Deuda</string>
     <string name="activity_debt_detail_call_menu_title">Llamar</string>
     <string name="activity_debt_detail_link_menu_title">Transferir</string>
-    <string name="activity_debt_detail_share_menu_title">Enviar detalles de Deuda</string>
+    <string name="activity_debt_detail_share_menu_title">Enviar/Notificar Deuda</string>
     <string name="activity_create_debt_select_contact_title">Contacto:</string>
     <string name="create_debt_activity_invalid_contact_selection">Contacto no valido. Seleccione uno que tenga celular.</string>
     <string name="create_debt_activity_invalid_total_amount">Invalid total value</string>
@@ -53,6 +53,7 @@
     <string name="preference_password_value_detail">Establece una contraseña compuesta de 4 números.</string>
     <string name="preference_password_value_title">Ingrese su contaseña</string>
     <string name="title_activity_debt_detailed">DebtDetailedActivity</string>
+    <string name="title_contacts">title_activity_contacts</string>
 
     <!--<string-array name="pref_sync_frequency_values">-->
     <!--<item>15</item>-->

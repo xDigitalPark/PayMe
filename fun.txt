@@ -1,18 +1,6 @@
-DPPM-001: The Balance is updated when a DebtHeader is closed. ==== DONE
-Firebase Integration.
-Use my cellphone number.
-Contacts automatic Added.
-Pagos periodicos.
-
-
-
-Bugfix Tab panels.
-Acceso por contrasena agregado.
-
-create contacts table.
-http://www.androidhub4you.com/2012/07/auto-complete-demo-in-android.html
-http://www.javatpoint.com/android-autocompletetextview-example
-
-en los perfiles poder poner sus numeros de cuenta.
-Agregar prepago de deuda.
-historial
+Contactos/ Eliminarlos.
+Pago parcial
+Alarmas
+Poner pagos periodicos. /detalle
+Calificar deudas y pagos.
+multimoneda

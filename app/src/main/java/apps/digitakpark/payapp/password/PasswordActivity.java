@@ -35,11 +35,11 @@ public class PasswordActivity extends AppCompatActivity implements PasswordView 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         passwordEnabled = preferences.getBoolean("password_enabled", false);
         passwordValue = preferences.getString("password_value", "");
-
         if (!passwordEnabled) {
             navigateToMainActivity();
         }
         super.onStart();
+        passwordActivityPasswordTextview.setFocusable(true);
     }
 
     @OnClick(R.id.password_activity_validate_password)
