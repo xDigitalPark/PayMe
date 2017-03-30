@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import apps.digitakpark.payapp.PaymeApplication;
+import apps.digitakpark.payapp.events.ContactsEvent;
 import apps.digitakpark.payapp.lib.events.EventBus;
 import apps.digitakpark.payapp.events.CreateDebtEvent;
 import apps.digitakpark.payapp.lib.data.DatabaseAdapter;
@@ -40,6 +41,31 @@ public class ContactRepositoryImpl implements ContactRepository {
             }
             CreateDebtEvent event = new CreateDebtEvent();
             event.setStatus(CreateDebtEvent.CONTACT_LIST_OK);
+            event.setMessage("OK");
+            event.setContactList(contactList);
+            eventBus.post(event);
+        }
+    }
+
+    @Override
+    public void getContactsList() {
+        String query = "SELECT id, number, name " +
+                "FROM " + DatabaseAdapter.CONTACT_TABLE;
+        Cursor cursor = database.retrieveData(query);
+        if (cursor != null) {
+            List<Contact> contactList = new ArrayList<>();
+            Contact contact = null;
+            Double total = 0D;
+            while (cursor.moveToNext()) {
+                contact = new Contact(
+                        cursor.getLong(cursor.getColumnIndex("id")),
+                        cursor.getString(cursor.getColumnIndex("number")),
+                        cursor.getString(cursor.getColumnIndex("name"))
+                );
+                contactList.add(contact);
+            }
+            ContactsEvent event = new ContactsEvent();
+            event.setStatus(ContactsEvent.CONTACT_LIST_OK);
             event.setMessage("OK");
             event.setContactList(contactList);
             eventBus.post(event);

@@ -110,7 +110,8 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.action_settings) {
             navigateToSettingsActivity();
             return true;
-        } else if(id == R.id.action_contacts) {
+        }
+        else if(id == R.id.action_contacts) {
             navigateToContactsActivity();
         }
         return super.onOptionsItemSelected(item);

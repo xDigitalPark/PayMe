@@ -54,6 +54,7 @@
     <string name="preference_password_value_title">Ingrese su contaseña</string>
     <string name="title_activity_debt_detailed">DebtDetailedActivity</string>
     <string name="title_contacts">Contactos</string>
+    <string name="common_delete">Eliminar</string>
 
     <!--<string-array name="pref_sync_frequency_values">-->
     <!--<item>15</item>-->

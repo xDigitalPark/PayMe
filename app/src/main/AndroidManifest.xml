@@ -37,6 +37,7 @@
             android:name="apps.digitakpark.payapp.detail.ui.DebtDetailedActivity"
             android:label="@string/title_activity_debt_detailed"
             android:parentActivityName="apps.digitakpark.payapp.MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -50,6 +51,11 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="apps.digitakpark.payapp.MainActivity" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
     </application>
 
