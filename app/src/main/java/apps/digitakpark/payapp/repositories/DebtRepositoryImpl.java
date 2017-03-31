@@ -9,6 +9,7 @@ import apps.digitakpark.payapp.PaymeApplication;
 import apps.digitakpark.payapp.events.DebtDetailEvent;
 import apps.digitakpark.payapp.lib.data.DatabaseAdapter;
 import apps.digitakpark.payapp.lib.events.EventBus;
+import apps.digitakpark.payapp.model.Contact;
 import apps.digitakpark.payapp.model.DebtHeader;
 import apps.digitakpark.payapp.events.ToChargeDebtListEvent;
 import apps.digitakpark.payapp.events.ToPayDebtListEvent;
@@ -20,11 +21,13 @@ public class DebtRepositoryImpl implements DebtRepository {
     private DatabaseAdapter database;
     private EventBus eventBus;
     private DebtLookupRepository lookupRepository;
+    private ContactRepository contactRepository;
 
     public DebtRepositoryImpl() {
         this.database = PaymeApplication.getDatabaseInstance();
         this.eventBus = GreenRobotEventBus.getInstance();
         this.lookupRepository = new DebtLookupRepositoryImpl();
+        this.contactRepository = new ContactRepositoryImpl();
     }
 
     @Override
@@ -165,8 +168,6 @@ public class DebtRepositoryImpl implements DebtRepository {
             data.put(DatabaseAdapter.BALANCE_TABLE_COL_NUMBER, number);
             data.put(DatabaseAdapter.BALANCE_TABLE_COL_NAME, name);
 
-
-
             if (balanceFound != null) {
                 // Check if delete
                 DebtHeader reverseDebtHeaderFound = lookupRepository.lookupDebtHeader(currentNumber, !mine);
@@ -181,6 +182,12 @@ public class DebtRepositoryImpl implements DebtRepository {
 
             if (balanceUpdated == true) {
                 // Send Event
+
+                Contact contact = lookupRepository.lookupContact(number);
+                if (contact == null) {
+                    contactRepository.upsertContact(number, name);
+                }
+
                 Map<String, String> dataDet = new HashMap<>();
                 dataDet.put("name", name);
                 dataDet.put("number", number);
