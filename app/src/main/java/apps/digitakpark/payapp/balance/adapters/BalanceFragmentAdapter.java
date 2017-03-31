@@ -45,7 +45,7 @@ public class BalanceFragmentAdapter extends RecyclerView.Adapter<BalanceViewHold
         holder.view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                selectedBalance = balance;
+                PaymeApplication.selectedBalance = balance;
                 return false;
             }
         });

@@ -4,6 +4,7 @@ import android.app.Application;
 
 import apps.digitakpark.payapp.lib.data.LocalDatabaseAdapterImpl;
 import apps.digitakpark.payapp.lib.data.DatabaseAdapter;
+import apps.digitakpark.payapp.model.Balance;
 import apps.digitakpark.payapp.utils.Formatters;
 
 
@@ -11,6 +12,9 @@ public class PaymeApplication extends Application {
 
     private static DatabaseAdapter database;
     private static Formatters formatters;
+
+    // FIXME: When firebase is implemented
+    public static Balance selectedBalance;
 
     @Override
     public void onCreate() {
