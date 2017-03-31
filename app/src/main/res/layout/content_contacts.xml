@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/listBackground"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="apps.digitakpark.payapp.contacts.ContactsActivity"
+    tools:context="apps.digitakpark.payapp.contacts.ui.ContactsActivity"
     tools:showIn="@layout/activity_contacts">
 
     <android.support.design.widget.CoordinatorLayout

@@ -1,5 +1,6 @@
 package apps.digitakpark.payapp.repositories;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.ArrayList;
@@ -16,10 +17,12 @@ import apps.digitakpark.payapp.model.Contact;
 public class ContactRepositoryImpl implements ContactRepository {
     private EventBus eventBus;
     private DatabaseAdapter database;
+    private DebtLookupRepository debtLookupRepository;
 
     public ContactRepositoryImpl() {
         this.eventBus = GreenRobotEventBus.getInstance();
         this.database = PaymeApplication.getDatabaseInstance();
+        this.debtLookupRepository = new DebtLookupRepositoryImpl();
     }
 
     @Override
@@ -68,6 +71,28 @@ public class ContactRepositoryImpl implements ContactRepository {
             event.setStatus(ContactsEvent.CONTACT_LIST_OK);
             event.setMessage("OK");
             event.setContactList(contactList);
+            eventBus.post(event);
+        }
+    }
+
+    @Override
+    public boolean upsertContact(String number, String name) {
+        Contact foundContact = debtLookupRepository.lookupContact(number);
+        if (foundContact == null) {
+            ContentValues contactData = new ContentValues();
+            contactData.put(DatabaseAdapter.CONTACT_NUMBER, number);
+            contactData.put(DatabaseAdapter.CONTACT_NAME, name);
+            return database.insertData(DatabaseAdapter.CONTACT_TABLE, contactData);
+        }
+        return true;
+    }
+
+    @Override
+    public void addContact(String number, String name) {
+        if (upsertContact(number, name)) {
+            ContactsEvent event = new ContactsEvent();
+            event.setStatus(ContactsEvent.CONTACT_ADDED_OK);
+            event.setMessage("OK");
             eventBus.post(event);
         }
     }

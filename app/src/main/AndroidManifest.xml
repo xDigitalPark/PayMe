@@ -44,7 +44,7 @@
                 android:value="apps.digitakpark.payapp.MainActivity" />
         </activity>
         <activity
-            android:name="apps.digitakpark.payapp.contacts.ContactsActivity"
+            android:name="apps.digitakpark.payapp.contacts.ui.ContactsActivity"
             android:label="@string/title_contacts"
             android:parentActivityName="apps.digitakpark.payapp.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">

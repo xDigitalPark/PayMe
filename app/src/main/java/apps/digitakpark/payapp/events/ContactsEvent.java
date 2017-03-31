@@ -10,6 +10,7 @@ import apps.digitakpark.payapp.model.Contact;
 
 public class ContactsEvent {
     public static final int CONTACT_LIST_OK = 0x01;
+    public static final int CONTACT_ADDED_OK = 0x02;
     private int status;
     private String message;
     private List<Contact> contactList;
@@ -42,4 +43,5 @@ public class ContactsEvent {
     public void setContactList(List<Contact> contactList) {
         this.contactList = contactList;
     }
+
 }

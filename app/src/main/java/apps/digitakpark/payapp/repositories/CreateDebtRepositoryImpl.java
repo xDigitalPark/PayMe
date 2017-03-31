@@ -18,27 +18,22 @@ public class CreateDebtRepositoryImpl implements CreateDebtRepository {
     private EventBus eventBus;
     private DatabaseAdapter database;
     private DebtLookupRepository debtLookupRepository;
+    private ContactRepository contactRepository;
+
 
     public CreateDebtRepositoryImpl() {
         this.eventBus = GreenRobotEventBus.getInstance();
         this.database = PaymeApplication.getDatabaseInstance();
         this.debtLookupRepository = new DebtLookupRepositoryImpl();
+        this.contactRepository = new ContactRepositoryImpl();
     }
 
     @Override
     public void createDebt(DebtHeader debtHeader, Debt debt) {
-        // Modify contact base on the Contact Name
-//        Contact contact = debtLookupRepository.lookupContact(DatabaseAdapter.CONTACT_NAME, debtHeader.getName());
-//        if (contact != null) {
-//            debtHeader.setName(contact.getName());
-//            debtHeader.setNumber(contact.getNumber());
-//            debt.setNumber(contact.getNumber());
-//        }
-        // Create Debt
         boolean debtHeaderAdded = createDebtHeader(debtHeader),
                 debtAdded = createDebt(debt),
                 balanceAdded = createBalance(debtHeader, debt),
-                contactUpserted = upsertContact(debtHeader);
+                contactUpserted = contactRepository.upsertContact(debtHeader.getNumber(), debtHeader.getName());
         if(debtHeaderAdded && debtAdded && balanceAdded && contactUpserted) {
             CreateDebtEvent event = new CreateDebtEvent();
             event.setMessage("Deuda creada");
@@ -132,16 +127,7 @@ public class CreateDebtRepositoryImpl implements CreateDebtRepository {
         }
     }
 
-    private boolean upsertContact(DebtHeader debtHeader) {
-        Contact foundContact = debtLookupRepository.lookupContact(debtHeader.getNumber());
-        if (foundContact == null) {
-            ContentValues contactData = new ContentValues();
-            contactData.put(DatabaseAdapter.CONTACT_NUMBER, debtHeader.getNumber());
-            contactData.put(DatabaseAdapter.CONTACT_NAME, debtHeader.getName());
-            return database.insertData(DatabaseAdapter.CONTACT_TABLE, contactData);
-        }
-        return true;
-    }
+
 
     @Override
     public void editDebt(DebtHeader debtHeader, Debt debt, Double editPreTotal) {

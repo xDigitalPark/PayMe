@@ -18,7 +18,7 @@ import android.view.View;
 
 import apps.digitakpark.payapp.balance.listeners.OnTabSelectedListener;
 import apps.digitakpark.payapp.balance.ui.BalanceFragment;
-import apps.digitakpark.payapp.contacts.ContactsActivity;
+import apps.digitakpark.payapp.contacts.ui.ContactsActivity;
 import apps.digitakpark.payapp.create.ui.CreateDebtActivity;
 import apps.digitakpark.payapp.list.tocharge.ToChargeFragment;
 import apps.digitakpark.payapp.preferences.PreferencesActivity;

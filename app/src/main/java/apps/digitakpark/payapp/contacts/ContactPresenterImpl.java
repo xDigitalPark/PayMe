@@ -7,7 +7,7 @@ import apps.digitakpark.payapp.events.ContactsEvent;
 import apps.digitakpark.payapp.lib.events.EventBus;
 import apps.digitakpark.payapp.lib.events.GreenRobotEventBus;
 
-class ContactPresenterImpl implements ContactPresenter {
+public class ContactPresenterImpl implements ContactPresenter {
 
     private ContactsView view;
     private ContactsIteractor iteractor;
@@ -44,7 +44,15 @@ class ContactPresenterImpl implements ContactPresenter {
         switch (event.getStatus()) {
             case ContactsEvent.CONTACT_LIST_OK:
                 view.onLoadContactList(event.getContactList());
+                break;
+            case ContactsEvent.CONTACT_ADDED_OK:
+                view.showContactAdded();
+                break;
         }
     }
 
+    @Override
+    public void doSendAddContact(String number, String name) {
+        iteractor.doAddContact(number, name);
+    }
 }

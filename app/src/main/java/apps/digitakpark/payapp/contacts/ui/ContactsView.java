@@ -13,4 +13,6 @@ public interface ContactsView {
     void onLoadContactList(List<Contact> contactList);
     void showPickContactActivity();
     void onPickedContact(Uri contactData);
+
+    void showContactAdded();
 }

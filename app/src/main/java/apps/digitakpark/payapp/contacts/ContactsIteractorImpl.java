@@ -15,4 +15,9 @@ class ContactsIteractorImpl implements ContactsIteractor {
     public void doRetrieveContactsList() {
         repository.getContactsList();
     }
+
+    @Override
+    public void doAddContact(String number, String name) {
+        repository.addContact(number, name);
+    }
 }
