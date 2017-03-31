@@ -16,6 +16,7 @@ public class ContactViewHolder extends RecyclerView.ViewHolder implements View.O
         super(view);
         this.nameEditText = (TextView) view.findViewById(R.id.activity_contacts_name);
         this.view = view;
+        this.view.setOnCreateContextMenuListener(this);
     }
 
     @Override

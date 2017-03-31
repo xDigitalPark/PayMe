@@ -6,6 +6,7 @@ import apps.digitakpark.payapp.contacts.ui.ContactsView;
 import apps.digitakpark.payapp.events.ContactsEvent;
 import apps.digitakpark.payapp.lib.events.EventBus;
 import apps.digitakpark.payapp.lib.events.GreenRobotEventBus;
+import apps.digitakpark.payapp.model.Contact;
 
 public class ContactPresenterImpl implements ContactPresenter {
 
@@ -48,11 +49,20 @@ public class ContactPresenterImpl implements ContactPresenter {
             case ContactsEvent.CONTACT_ADDED_OK:
                 view.showContactAdded();
                 break;
+            case ContactsEvent.CONTACT_REMOVE_OK:
+                view.onRestartList();
+                break;
+
         }
     }
 
     @Override
     public void doSendAddContact(String number, String name) {
         iteractor.doAddContact(number, name);
+    }
+
+    @Override
+    public void sendRemoveContact(Contact contact) {
+        iteractor.doRemoveContact(contact);
     }
 }

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--<color name="colorPrimary">#3F51B5</color>-->
-    <color name="colorPrimary">#069D6F</color>
+    <color name="colorPrimary">#D4AC0D</color>
     <!--<color name="colorPrimaryDark">#303F9F</color>-->
-    <color name="colorPrimaryDark">#069D6F</color>
+    <color name="colorPrimaryDark">#D4AC0D</color>
 
     <!--<color name="colorAccent">#FF4081</color>-->
     <color name="colorAccent">#FFC300</color>
-    <color name="positiveDebt">#1C8360</color>
-    <color name="negativeDebt">#F01E65</color>
+    <color name="positiveDebt">#B9770E</color>
+    <color name="negativeDebt">#CB4335</color>
     <color name="listBackground">#FCFAEA</color>
     <color name="totalBackground">#F3F1DC</color>
 </resources>

@@ -15,4 +15,6 @@ public interface ContactsView {
     void onPickedContact(Uri contactData);
 
     void showContactAdded();
+
+    void onRestartList();
 }

@@ -1,5 +1,7 @@
 package apps.digitakpark.payapp.repositories;
 
+import apps.digitakpark.payapp.model.Contact;
+
 public interface ContactRepository {
 
     void getContacts();
@@ -7,4 +9,6 @@ public interface ContactRepository {
     boolean upsertContact(String number, String name);
 
     void addContact(String number, String name);
+
+    void removeContact(Contact contact);
 }

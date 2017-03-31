@@ -1,5 +1,6 @@
 package apps.digitakpark.payapp.contacts;
 
+import apps.digitakpark.payapp.model.Contact;
 import apps.digitakpark.payapp.repositories.ContactRepository;
 import apps.digitakpark.payapp.repositories.ContactRepositoryImpl;
 
@@ -19,5 +20,10 @@ class ContactsIteractorImpl implements ContactsIteractor {
     @Override
     public void doAddContact(String number, String name) {
         repository.addContact(number, name);
+    }
+
+    @Override
+    public void doRemoveContact(Contact contact) {
+        repository.removeContact(contact);
     }
 }

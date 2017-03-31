@@ -96,4 +96,17 @@ public class ContactRepositoryImpl implements ContactRepository {
             eventBus.post(event);
         }
     }
+
+    @Override
+    public void removeContact(Contact contact) {
+        boolean removed = database.deleteData(DatabaseAdapter.CONTACT_TABLE, "number = ?", contact.getNumber());
+        // TODO: Apply validation if has debts.
+
+        if (removed) {
+            ContactsEvent event = new ContactsEvent();
+            event.setStatus(ContactsEvent.CONTACT_REMOVE_OK);
+            event.setMessage("OK");
+            eventBus.post(event);
+        }
+    }
 }

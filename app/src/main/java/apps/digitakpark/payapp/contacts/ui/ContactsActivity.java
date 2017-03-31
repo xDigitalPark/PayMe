@@ -9,9 +9,11 @@ import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -50,7 +52,9 @@ public class ContactsActivity extends AppCompatActivity implements ContactsView 
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.addItemDecoration(new DividerItemDecorator(this, DividerItemDecorator.VERTICAL_LIST));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(layoutManager);
+
         recyclerView.setAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.contacts_activity_add_contact);
@@ -58,8 +62,6 @@ public class ContactsActivity extends AppCompatActivity implements ContactsView 
             @Override
             public void onClick(View view) {
                 showPickContactActivity();
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
             }
         });
 
@@ -86,6 +88,20 @@ public class ContactsActivity extends AppCompatActivity implements ContactsView 
         switch (requestCode) {
             case PICK_CONTACT:
                 onPickedContact(data.getData());
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        onContactSelected(adapter.getSelectedContact(), item.getItemId());
+        return super.onContextItemSelected(item);
+    }
+
+    private void onContactSelected(Contact selectedContact, int actionId) {
+        switch (actionId) {
+            case DELETE_CONTACT:
+                presenter.sendRemoveContact(selectedContact);
+                break;
         }
     }
 
@@ -127,7 +143,13 @@ public class ContactsActivity extends AppCompatActivity implements ContactsView 
 
     @Override
     public void showContactAdded() {
-        Snackbar.make(recyclerView, "Contact Added!", Snackbar.LENGTH_LONG)
+        Snackbar.make(recyclerView, "Contact list updated!", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
+    }
+
+    @Override
+    public void onRestartList() {
+        presenter.sendRetrieveContactList();
+        showContactAdded();
     }
 }
