@@ -2,7 +2,6 @@ package apps.digitakpark.payapp.detail.ui;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +18,7 @@ public interface DebtDetailView {
     void onLoadDebtList(List<Debt> debtList);
     void onLoadTotal(Double total);
     void navigateToCreateDebtActivity(boolean mine);
+    void navigateToPaymentsActivity(Debt debt);
     void onDebtSelected(Debt debt, int actionId);
     void onCloseDebtOptionSelected(Debt debt);
     void onDeleteDebtOptionSelected(Debt debt);
@@ -30,4 +30,5 @@ public interface DebtDetailView {
     void showPickContactActivity();
     void updateContactInfo(Map<String, String> data);
     void showMessage(String message);
+
 }

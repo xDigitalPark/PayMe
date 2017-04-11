@@ -32,15 +32,17 @@ import apps.digitakpark.payapp.detail.DebtDetailPresenter;
 import apps.digitakpark.payapp.detail.DebtDetailPresenterImpl;
 import apps.digitakpark.payapp.detail.adapters.DebtDetailActivityAdapter;
 import apps.digitakpark.payapp.list.DividerItemDecorator;
+import apps.digitakpark.payapp.list.common.ui.OnClickDebtHeaderListener;
 import apps.digitakpark.payapp.model.Debt;
 import apps.digitakpark.payapp.model.DebtHeader;
+import apps.digitakpark.payapp.payments.PaymentActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import payme.pe.apps.digitakpark.payme.R;
 
 import android.support.v7.app.AlertDialog;
 
-public class DebtDetailedActivity extends AppCompatActivity implements DebtDetailView {
+public class DebtDetailedActivity extends AppCompatActivity implements DebtDetailView, OnClickDebtDetailListener {
 
     public static final int PICK_CONTACT_TO_LINK = 1002;
 
@@ -69,7 +71,7 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
         Bundle extras = getIntent().getExtras();
         prepopActivity(extras);
 
-        this.adapter = new DebtDetailActivityAdapter(this.debtList);
+        this.adapter = new DebtDetailActivityAdapter(this.debtList, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.addItemDecoration(new DividerItemDecorator(this, DividerItemDecorator.VERTICAL_LIST));
         recyclerView.setLayoutManager(layoutManager);
@@ -81,8 +83,6 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
             @Override
             public void onClick(View view) {
                 navigateToCreateDebtActivity(mine);
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -110,6 +110,16 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
     }
 
 
+    @Override
+    public void onClick(Debt debt) {
+        navigateToPaymentsActivity(debt);
+    }
+
+    @Override
+    public void navigateToPaymentsActivity(Debt debt) {
+        Intent intent = new Intent(this, PaymentActivity.class);
+        startActivity(intent);
+    }
 
     public  void showShareAction() {
         StringBuilder sb = new StringBuilder();
@@ -307,4 +317,6 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
         Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
+
+
 }

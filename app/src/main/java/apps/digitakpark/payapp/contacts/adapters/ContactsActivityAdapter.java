@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import apps.digitakpark.payapp.detail.adapters.DetailViewHolder;
-import apps.digitakpark.payapp.model.Balance;
 import apps.digitakpark.payapp.model.Contact;
 import payme.pe.apps.digitakpark.payme.R;
 

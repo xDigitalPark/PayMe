@@ -5,8 +5,9 @@ import android.view.ContextMenu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import payme.pe.apps.digitakpark.payme.R;
+
 import apps.digitakpark.payapp.detail.ui.DebtDetailView;
+import payme.pe.apps.digitakpark.payme.R;
 
 public class DetailViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener
 {

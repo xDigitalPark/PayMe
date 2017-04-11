@@ -1,6 +1,9 @@
-Contactos/ Eliminarlos.
 Pago parcial
+Recordatorios
 Alarmas
 Poner pagos periodicos. /detalle
 Calificar deudas y pagos.
+
 multimoneda
+
+perfil contactos/ notas

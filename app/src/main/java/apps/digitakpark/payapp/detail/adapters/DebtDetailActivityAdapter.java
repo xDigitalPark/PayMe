@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import apps.digitakpark.payapp.PaymeApplication;
+import apps.digitakpark.payapp.detail.ui.OnClickDebtDetailListener;
 import apps.digitakpark.payapp.model.Debt;
 import payme.pe.apps.digitakpark.payme.R;
 
@@ -15,9 +16,11 @@ public class DebtDetailActivityAdapter extends RecyclerView.Adapter<DetailViewHo
 
     private List<Debt> debtList;
     private Debt selectedDebt;
+    private OnClickDebtDetailListener listener;
 
-    public DebtDetailActivityAdapter(List<Debt> debtList) {
+    public DebtDetailActivityAdapter(List<Debt> debtList, OnClickDebtDetailListener listener) {
         this.debtList = debtList;
+        this.listener = listener;
     }
 
     @Override
@@ -45,6 +48,12 @@ public class DebtDetailActivityAdapter extends RecyclerView.Adapter<DetailViewHo
         } else {
             holder.totalEditText.setTextColor(holder.view.getResources().getColor(R.color.positiveDebt));
         }
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onClick(debt);
+            }
+        });
         holder.view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {

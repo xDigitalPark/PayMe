@@ -2,8 +2,8 @@ package apps.digitakpark.payapp.detail;
 
 import org.greenrobot.eventbus.Subscribe;
 
-import apps.digitakpark.payapp.lib.events.EventBus;
 import apps.digitakpark.payapp.detail.ui.DebtDetailView;
+import apps.digitakpark.payapp.lib.events.EventBus;
 import apps.digitakpark.payapp.events.DebtDetailEvent;
 import apps.digitakpark.payapp.lib.events.GreenRobotEventBus;
 import apps.digitakpark.payapp.model.Debt;

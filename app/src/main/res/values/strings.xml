@@ -55,6 +55,9 @@
     <string name="title_activity_debt_detailed">DebtDetailedActivity</string>
     <string name="title_contacts">Contactos</string>
     <string name="common_delete">Eliminar</string>
+    <string name="title_activity_debt_detail">DebtDetailActivity</string>
+    <string name="title_activity_item_detail">ItemDetailActivity</string>
+    <string name="title_activity_payment">Historial de Pagos</string>
 
     <!--<string-array name="pref_sync_frequency_values">-->
     <!--<item>15</item>-->
