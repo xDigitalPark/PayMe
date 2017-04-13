@@ -58,6 +58,10 @@
     <string name="title_activity_debt_detail">DebtDetailActivity</string>
     <string name="title_activity_item_detail">ItemDetailActivity</string>
     <string name="title_activity_payment">Historial de Pagos</string>
+    <string name="payment_te_presta">TE PRESTA</string>
+    <string name="payment_pagas">PAGAS</string>
+    <string name="payment_le_prestas">LE PRESTAS</string>
+    <string name="payment_te_paga">TE PAGA</string>
 
     <!--<string-array name="pref_sync_frequency_values">-->
     <!--<item>15</item>-->

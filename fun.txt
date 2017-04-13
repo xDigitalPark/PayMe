@@ -1,3 +1,11 @@
+1. Agregar automaticamente el prestamo como primer registro de detalle.
+2. Crear popup para insertar Payment.
+3. Editar payment option.
+
+
+
+
+
 Pago parcial
 Recordatorios
 Alarmas
@@ -7,3 +15,6 @@ Calificar deudas y pagos.
 multimoneda
 
 perfil contactos/ notas
+
+
+

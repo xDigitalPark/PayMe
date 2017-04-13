@@ -16,20 +16,21 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:padding="5dp"
+        android:padding="10dp"
         android:background="@color/totalBackground"
         android:orientation="horizontal"
-        android:paddingBottom="15dp">
+        android:paddingBottom="15dp"
+        android:id="@+id/relativeLayout">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Medium Text"
-            android:id="@+id/activity_debt_detail_item_concept_edittext"
+            android:id="@+id/payment_activity_concept_edittext"
             android:textSize="@dimen/debt_text_size"
             android:fontFamily="sans-serif-medium"
             android:textColor="#010101"
-            android:layout_alignTop="@+id/payment_activity_item_total_edittext"
+            android:layout_alignTop="@+id/payment_activity_total_edittext"
             />
 
         <TextView
@@ -37,7 +38,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Medium Text"
-            android:id="@+id/payment_activity_item_total_edittext"
+            android:id="@+id/payment_activity_total_edittext"
             android:layout_gravity="right"
             android:textSize="@dimen/debt_text_size"
             android:fontFamily="sans-serif-medium"
@@ -52,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/payment_activity_item_total_edittext"
+            android:layout_below="@+id/payment_activity_total_edittext"
             android:fontFamily="sans-serif-medium"
             android:text="19 ENE 17"
             android:textAppearance="?android:attr/textAppearanceSmall"
@@ -63,7 +64,7 @@
             android:id="@+id/activity_debt_detail_item_date_limit_icon"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_below="@+id/payment_activity_item_total_edittext"
+            android:layout_below="@+id/payment_activity_total_edittext"
             android:layout_toLeftOf="@+id/payment_activity_item_date_limit_text"
             android:layout_toStartOf="@+id/payment_activity_item_date_limit_text"
             android:background="@drawable/ic_notifications_black_24dp"
@@ -75,13 +76,23 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/activity_debt_detail_item_concept_edittext"
+            android:layout_below="@+id/payment_activity_concept_edittext"
             android:fontFamily="sans-serif-medium"
             android:text="19 ENE 17"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="@dimen/debt_date_text_size" />
 
     </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/payment_activity_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_below="@+id/relativeLayout" />
 
 </RelativeLayout>
 

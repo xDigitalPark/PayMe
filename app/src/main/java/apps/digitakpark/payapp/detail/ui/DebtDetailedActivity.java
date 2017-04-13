@@ -45,6 +45,15 @@ import android.support.v7.app.AlertDialog;
 public class DebtDetailedActivity extends AppCompatActivity implements DebtDetailView, OnClickDebtDetailListener {
 
     public static final int PICK_CONTACT_TO_LINK = 1002;
+    public static final String DEBT_NUMBER = "debt_number";
+    public static final String DEBT_CONCEPT = "debt_concept";
+    public static final String DEBT_CURRENCY= "debt_currency";
+    public static final String DEBT_TOTAL = "debt_total";
+    public static final String DEBT_DATE = "debt_date";
+    public static final String DEBT_LIMIT = "debt_limit";
+    public static final String DEBT_MINE = "debt_mine";
+    public static final String DEBT_NAME = "debt_name";
+
 
     @BindView(R.id.activity_debt_detailed_total)
     TextView activityDebtDetailedTotal;
@@ -118,6 +127,14 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
     @Override
     public void navigateToPaymentsActivity(Debt debt) {
         Intent intent = new Intent(this, PaymentActivity.class);
+        intent.putExtra(DEBT_NUMBER, debt.getNumber());
+        intent.putExtra(DEBT_CONCEPT, debt.getConcept());
+        intent.putExtra(DEBT_CURRENCY, debt.getCurrency());
+        intent.putExtra(DEBT_TOTAL, debt.getTotal());
+        intent.putExtra(DEBT_DATE, debt.getDate());
+        intent.putExtra(DEBT_LIMIT, debt.getLimit());
+        intent.putExtra(DEBT_MINE, debt.isMine());
+        intent.putExtra(DEBT_NAME, name);
         startActivity(intent);
     }
 
