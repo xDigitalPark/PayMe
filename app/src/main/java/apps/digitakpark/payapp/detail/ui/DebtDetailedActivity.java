@@ -32,10 +32,9 @@ import apps.digitakpark.payapp.detail.DebtDetailPresenter;
 import apps.digitakpark.payapp.detail.DebtDetailPresenterImpl;
 import apps.digitakpark.payapp.detail.adapters.DebtDetailActivityAdapter;
 import apps.digitakpark.payapp.list.DividerItemDecorator;
-import apps.digitakpark.payapp.list.common.ui.OnClickDebtHeaderListener;
 import apps.digitakpark.payapp.model.Debt;
 import apps.digitakpark.payapp.model.DebtHeader;
-import apps.digitakpark.payapp.payments.PaymentActivity;
+import apps.digitakpark.payapp.payments.ui.PaymentActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import payme.pe.apps.digitakpark.payme.R;
@@ -53,6 +52,7 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
     public static final String DEBT_LIMIT = "debt_limit";
     public static final String DEBT_MINE = "debt_mine";
     public static final String DEBT_NAME = "debt_name";
+    public static final String DEBT_ID = "debt_id";
 
 
     @BindView(R.id.activity_debt_detailed_total)
@@ -135,6 +135,7 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
         intent.putExtra(DEBT_LIMIT, debt.getLimit());
         intent.putExtra(DEBT_MINE, debt.isMine());
         intent.putExtra(DEBT_NAME, name);
+        intent.putExtra(DEBT_ID, debt.getId());
         startActivity(intent);
     }
 

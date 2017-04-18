@@ -10,6 +10,14 @@ public interface DatabaseAdapter {
     String CONTACT_NUMBER = "number";
     String CONTACT_NAME = "name";
 
+    String PAYMENTS_TABLE = "PAYMENTS";
+    String PAYMENTS_TABLE_COL_DATE = "date";
+    String PAYMENTS_TABLE_COL_TOTAL = "total";
+    String PAYMENTS_TABLE_COL_NUMBER = "number";
+    String PAYMENTS_TABLE_COL_MINE = "mine";
+    String PAYMENTS_TABLE_COL_DEBT_ID = "debt_id";
+
+
     String DEBT_HEADER_TABLE_TOCHARGE = "DEBT_HEADER_TOCHARGE";
     String DEBT_HEADER_TABLE_TOPAY = "DEBT_HEADER_TOPAY";
     String DEBT_HEADER_TABLE_COL_NUMBER = "number";

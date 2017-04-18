@@ -9,8 +9,8 @@ android {
         applicationId "apps.digitalpark.payapp"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 3
-        versionName "2.1"
+        versionCode 4
+        versionName "3"
     }
     buildTypes {
         release {

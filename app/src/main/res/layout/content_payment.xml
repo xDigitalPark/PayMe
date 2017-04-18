@@ -8,7 +8,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:background="@color/listBackground"
     android:layout_height="match_parent"
-    tools:context="apps.digitakpark.payapp.payments.PaymentActivity"
+    tools:context="apps.digitakpark.payapp.payments.ui.PaymentActivity"
         tools:showIn="@layout/activity_payment">
 
     <RelativeLayout

@@ -53,7 +53,7 @@
                 android:value="apps.digitakpark.payapp.MainActivity" />
         </activity>
         <activity
-            android:name="apps.digitakpark.payapp.payments.PaymentActivity"
+            android:name="apps.digitakpark.payapp.payments.ui.PaymentActivity"
             android:label="@string/title_activity_payment"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

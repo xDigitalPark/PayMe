@@ -3,26 +3,27 @@ package apps.digitakpark.payapp.model;
 public class Payment {
 
     private Long id;
-    private String number;
     private Long date;
     private Double total;
+    private String number;
+    private boolean mine;
+    private Long debtId;
 
-    public Payment(Long id, String number, Long date, Double total) {
+    public Payment(Long id, Long date, Double total) {
         this.id = id;
-        this.number = number;
         this.date = date;
         this.total = total;
     }
 
+    public Long getDebtId() {
+        return debtId;
+    }
+
+    public void setDebtId(Long debtId) {
+        this.debtId = debtId;
+    }
+
     public Payment() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNumber() {
@@ -31,6 +32,22 @@ public class Payment {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public boolean isMine() {
+        return mine;
+    }
+
+    public void setMine(boolean mine) {
+        this.mine = mine;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getDate() {
@@ -48,4 +65,5 @@ public class Payment {
     public void setTotal(Double total) {
         this.total = total;
     }
+
 }
