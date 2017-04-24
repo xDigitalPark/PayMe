@@ -3,8 +3,6 @@ package apps.digitakpark.payapp.payments.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -18,8 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -34,7 +30,6 @@ import apps.digitakpark.payapp.model.Payment;
 import apps.digitakpark.payapp.payments.PaymentsPresenter;
 import apps.digitakpark.payapp.payments.PaymentsPresenterImpl;
 import apps.digitakpark.payapp.payments.adapters.PaymentAdapter;
-import apps.digitakpark.payapp.payments.ui.PaymentView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -55,6 +50,8 @@ public class PaymentActivity extends AppCompatActivity implements PaymentView {
     TextView paymentActivityItemDateText;
     @BindView(R.id.payment_activity_recyclerview)
     RecyclerView recyclerView;
+    @BindView(R.id.payments_empty_view)
+    TextView paymentsEmptyView;
 
     private PaymentAdapter adapter;
 
@@ -83,7 +80,6 @@ public class PaymentActivity extends AppCompatActivity implements PaymentView {
         Bundle extras = getIntent().getExtras();
         prepopActivity(extras);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
         List<Payment> paymentList = new ArrayList<>();
         adapter = new PaymentAdapter(paymentList, currency, mine);
@@ -119,13 +115,13 @@ public class PaymentActivity extends AppCompatActivity implements PaymentView {
                 .setTitle("Registrar Pago")
                 .setPositiveButton("Guardar",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 // do nothing
                             }
                         })
                 .setNegativeButton("Cancelar",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
                         });
@@ -139,7 +135,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentView {
 
                     @Override
                     public void onClick(View view) {
-                        if(paymentTotal.getText().toString().isEmpty())
+                        if (paymentTotal.getText().toString().isEmpty())
                             return;
                         Double amount = Double.parseDouble(paymentTotal.getText().toString());
                         if (amount <= 0) {
@@ -167,7 +163,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentView {
         Payment payment = new Payment();
         payment.setTotal(total);
         payment.setDate(new Date().getTime());
-        payment.setTotal( -1 * total);
+        payment.setTotal(-1 * total);
         payment.setNumber(number);
         payment.setMine(mine);
         payment.setDebtId(debtId);
@@ -200,7 +196,8 @@ public class PaymentActivity extends AppCompatActivity implements PaymentView {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == DEBT_UPDATED_RESULT) {
-            prepopActivity(data.getExtras());
+            if (data != null)
+                prepopActivity(data.getExtras());
         }
     }
 
@@ -270,6 +267,14 @@ public class PaymentActivity extends AppCompatActivity implements PaymentView {
     @Override
     public void onLoadPaymentList(List<Payment> paymentList) {
         this.adapter.changeDataSet(paymentList);
+        if (paymentList.size() == 0) {
+            paymentsEmptyView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            paymentsEmptyView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+
     }
 
 
@@ -277,7 +282,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentView {
     public void onPaymentCreated(Double amount) {
         adapter.changeDataSet(new ArrayList<Payment>());
         presenter.sendRetrievePaymentsAction(number, mine, debtId);
-        totalDebt +=  amount;
+        totalDebt += amount;
         String totalFmt = PaymeApplication.getFormatters().formatMoney(totalDebt);
         paymentActivityTotalEdittext.setText(currency + " " + totalFmt);
     }

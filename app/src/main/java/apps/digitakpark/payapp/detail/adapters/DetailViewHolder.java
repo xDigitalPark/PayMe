@@ -33,6 +33,5 @@ public class DetailViewHolder extends RecyclerView.ViewHolder implements View.On
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
         menu.add(0, DebtDetailView.CLOSE_DEBT, 0, R.string.fragment_list_close_debt);
         menu.add(0, DebtDetailView.EDIT_DEBT, 0, R.string.fragment_list_edit_debt);
-        menu.add(0, DebtDetailView.DELETE_DEBT, 0, R.string.fragment_list_delete_debt);
     }
 }

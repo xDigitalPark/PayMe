@@ -93,6 +93,13 @@
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_below="@+id/relativeLayout" />
+    <TextView
+        android:id="@+id/payments_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="@string/no_hay_pagos_click" />
 
 </RelativeLayout>
 

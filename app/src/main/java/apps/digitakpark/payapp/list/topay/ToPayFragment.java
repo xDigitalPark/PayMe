@@ -32,6 +32,8 @@ public class ToPayFragment extends Fragment implements ListDebtView, OnClickDebt
     TextView fragmentToPayTotal;
     @BindView(R.id.fragment_to_pay_count)
     TextView fragmentToPayCount;
+    @BindView(R.id.payments_empty_view)
+    TextView paymentsEmptyView;
     private List<DebtHeader> debtHeaderList;
 
     @BindView(R.id.fragment_topay_recyclerview)
@@ -87,6 +89,14 @@ public class ToPayFragment extends Fragment implements ListDebtView, OnClickDebt
             fragmentToPayCount.setText(debtHeaderList.size() + " Registros");
         } else {
             fragmentToPayCount.setText(debtHeaderList.size() + " Registro");
+        }
+
+        if(debtHeaderList.size() == 0) {
+            paymentsEmptyView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            paymentsEmptyView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
     }
 

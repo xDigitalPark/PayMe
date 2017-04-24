@@ -35,6 +35,9 @@ public class ToChargeFragment extends Fragment implements ListDebtView, OnClickD
     RecyclerView recyclerView;
     @BindView(R.id.fragment_to_charge_total)
     TextView fragmentToChargeTotal;
+    @BindView(R.id.payments_empty_view)
+    TextView paymentsEmptyView;
+
     private List<DebtHeader> debtHeaderList = new ArrayList<>();
     private ToChargeFragmentAdapter adapter;
     private ListDebtPresenter presenter;
@@ -87,6 +90,13 @@ public class ToChargeFragment extends Fragment implements ListDebtView, OnClickD
             fragmentToChargeCount.setText(debtHeaderList.size() + " Registros");
         } else {
             fragmentToChargeCount.setText(debtHeaderList.size() + " Registro");
+        }
+        if(debtHeaderList.size() == 0) {
+            paymentsEmptyView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            paymentsEmptyView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
     }
 

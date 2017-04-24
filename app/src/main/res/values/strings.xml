@@ -63,6 +63,9 @@
     <string name="payment_pagas">PAGO</string>
     <string name="payment_le_prestas">LE PRESTO</string>
     <string name="payment_te_paga">ME PAGA</string>
+    <string name="no_hay_pagos_click">No hay Pagos registrados. Click +</string>
+    <string name="no_hay_deudas_click">No hay Deudas registradas. Click +</string>
+    <string name="no_hay_cuentas_click">No hay Cuentas por calcular.</string>
 
     <!--<string-array name="pref_sync_frequency_values">-->
     <!--<item>15</item>-->
