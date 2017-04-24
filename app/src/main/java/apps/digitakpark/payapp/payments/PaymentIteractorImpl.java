@@ -19,7 +19,7 @@ class PaymentIteractorImpl implements PaymentIteractor {
     }
 
     @Override
-    public void doRegisterPayment(Payment payment) {
-        this.repository.registerPayment(payment);
+    public void doRegisterPayment(Payment payment, Double currentTotal, Double newTotal) {
+        this.repository.registerPayment(payment, currentTotal, newTotal);
     }
 }

@@ -64,11 +64,13 @@ public class DebtDetailRepositoryImpl implements DebtDetailRespository {
     @Override
     public void deleteDebt(Debt debt) {
         String table = !debt.isMine()?DatabaseAdapter.DEBT_TABLE_TOCHARGE:DatabaseAdapter.DEBT_TABLE_TOPAY;
+        int mine = debt.isMine()?1:0;
         boolean debtDeleted = database.deleteData(table, "id = ?", debt.getId().toString()),
+                paymentsDeleted = database.deleteData(DatabaseAdapter.PAYMENTS_TABLE, "debt_id = ? AND mine = ?", new String[] {debt.getId().toString(), ""+mine }),
                 debtHeaderUpdated = updateDebtHeader(debt),
                 balanceUpdated = updateBalance(debt);
 
-        if (debtDeleted && debtHeaderUpdated && balanceUpdated) {
+        if (debtDeleted && debtHeaderUpdated && balanceUpdated && paymentsDeleted) {
             Balance balance = debtLookupRepository.lookupBalance(debt.getNumber());
             sendEvent(debt.getId());
         } else {

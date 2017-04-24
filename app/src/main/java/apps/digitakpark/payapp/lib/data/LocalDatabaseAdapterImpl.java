@@ -49,6 +49,12 @@ public class LocalDatabaseAdapterImpl  extends SQLiteOpenHelper implements Datab
     }
 
     @Override
+    public Long insertDataAndGetId(String table, ContentValues data) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.insert(table, null, data);
+    }
+
+    @Override
     public Cursor retrieveData(String query) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
@@ -71,6 +77,12 @@ public class LocalDatabaseAdapterImpl  extends SQLiteOpenHelper implements Datab
     public boolean deleteData(String table, String clause, String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(table, clause, new String[]{id}) != 0;
+    }
+
+    @Override
+    public boolean deleteData(String table, String clause, String[] values) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(table, clause, values) != 0;
     }
 
     @Override

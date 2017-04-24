@@ -5,5 +5,5 @@ import apps.digitakpark.payapp.model.Payment;
 public interface PaymentIteractor {
     void doRetrievePaymenttList(String number, boolean mine, Long debtId);
 
-    void doRegisterPayment(Payment payment);
+    void doRegisterPayment(Payment payment, Double currentTotal, Double newTotal);
 }

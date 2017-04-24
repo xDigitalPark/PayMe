@@ -9,4 +9,5 @@ public interface CreateDebtRepository {
     boolean createDebt(Debt debt);
     void editDebt(DebtHeader debtHeader, Debt debt, Double editPreTotal);
     boolean createBalance(DebtHeader debtHeader, Debt debt);
+    boolean updateDebtHeader(Debt debt, Double editPreTotal);
 }

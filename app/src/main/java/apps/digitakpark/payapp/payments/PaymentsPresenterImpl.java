@@ -44,13 +44,13 @@ public class PaymentsPresenterImpl implements PaymentsPresenter {
                 view.onLoadPaymentList(event.getPaymentList());
                 break;
             case PaymentEvent.PAYMENT_CREATED_OK:
-                view.onPaymentCreated();
+                view.onPaymentCreated(event.getTotal());
                 break;
         }
     }
 
     @Override
-    public void sendRegisterPayment(Payment payment) {
-        iteractor.doRegisterPayment(payment);
+    public void sendRegisterPayment(Payment payment, Double currentTotal, Double newTotal) {
+        iteractor.doRegisterPayment(payment, currentTotal, newTotal);
     }
 }

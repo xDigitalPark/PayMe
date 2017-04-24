@@ -46,7 +46,9 @@ public interface DatabaseAdapter {
     String BALANCE_TABLE_COL_MINE = "mine";
 
     boolean insertData(String table, ContentValues data);
+    Long insertDataAndGetId(String table, ContentValues data);
     boolean deleteData(String table, String clause, String id);
+    boolean deleteData(String table, String clause, String[] values);
     boolean updateData(String table, ContentValues data, String clause, String id);
     void executeSQL(String sql);
     int countData(String table, String clause);

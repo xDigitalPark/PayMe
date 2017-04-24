@@ -1,3 +1,5 @@
+add INITIAL LOAN IN THE LOG
+
 1. Actualizar Debt, header, y balance
 3. Editar payment option.
 

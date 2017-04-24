@@ -4,5 +4,6 @@ import apps.digitakpark.payapp.model.Payment;
 
 public interface PaymentRepository {
     void getPayments(String number, boolean mine, Long debtId);
-    void registerPayment(Payment payment);
+    void registerPayment(Payment payment, Double currentTotal, Double newTotal);
+
 }

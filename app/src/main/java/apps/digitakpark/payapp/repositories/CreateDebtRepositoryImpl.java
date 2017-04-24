@@ -12,6 +12,7 @@ import apps.digitakpark.payapp.model.Debt;
 import apps.digitakpark.payapp.model.DebtHeader;
 import apps.digitakpark.payapp.lib.events.EventBus;
 import apps.digitakpark.payapp.lib.events.GreenRobotEventBus;
+import apps.digitakpark.payapp.model.Payment;
 
 public class CreateDebtRepositoryImpl implements CreateDebtRepository {
 
@@ -33,8 +34,12 @@ public class CreateDebtRepositoryImpl implements CreateDebtRepository {
         boolean debtHeaderAdded = createDebtHeader(debtHeader),
                 debtAdded = createDebt(debt),
                 balanceAdded = createBalance(debtHeader, debt),
-                contactUpserted = contactRepository.upsertContact(debtHeader.getNumber(), debtHeader.getName());
-        if(debtHeaderAdded && debtAdded && balanceAdded && contactUpserted) {
+                contactUpserted = contactRepository.upsertContact(debtHeader.getNumber(), debtHeader.getName()),
+                paymentCreated = true;
+
+
+
+        if(debtHeaderAdded && debtAdded && balanceAdded && contactUpserted && paymentCreated) {
             CreateDebtEvent event = new CreateDebtEvent();
             event.setMessage("Deuda creada");
             event.setDebt(debt);
@@ -43,6 +48,18 @@ public class CreateDebtRepositoryImpl implements CreateDebtRepository {
             eventBus.post(event);
         }
     }
+
+//    private boolean createPayment(Debt debt) {
+//
+//        ContentValues data = new ContentValues();
+//        data.put(DatabaseAdapter.PAYMENTS_TABLE_COL_DEBT_ID, debt.getId());
+//        data.put(DatabaseAdapter.PAYMENTS_TABLE_COL_NUMBER, debt.getNumber());
+//        data.put(DatabaseAdapter.PAYMENTS_TABLE_COL_TOTAL, debt.getTotal());
+//        data.put(DatabaseAdapter.PAYMENTS_TABLE_COL_DATE, debt.getDate());
+//        data.put(DatabaseAdapter.PAYMENTS_TABLE_COL_MINE, debt.isMine());
+//
+//        return database.insertData(DatabaseAdapter.PAYMENTS_TABLE, data);
+//    }
 
     @Override
     public boolean createDebtHeader(DebtHeader debtHeader) {
@@ -82,11 +99,12 @@ public class CreateDebtRepositoryImpl implements CreateDebtRepository {
         debtData.put(DatabaseAdapter.DEBT_TABLE_COL_DATE, debt.getDate());
         debtData.put(DatabaseAdapter.DEBT_TABLE_COL_MINE, debt.isMine());
         debtData.put(DatabaseAdapter.DEBT_TABLE_COL_DATE_LIMIT, debt.getLimit());
-        if (!debt.isMine()) {
-            return database.insertData(DatabaseAdapter.DEBT_TABLE_TOCHARGE, debtData);
-        } else {
-            return database.insertData(DatabaseAdapter.DEBT_TABLE_TOPAY, debtData);
-        }
+
+        String table = (!debt.isMine())?DatabaseAdapter.DEBT_TABLE_TOCHARGE:DatabaseAdapter.DEBT_TABLE_TOPAY;
+        Long id =  database.insertDataAndGetId(table, debtData);
+        debt.setId(id);
+        return id != -1;
+
     }
 
     @Override
@@ -157,7 +175,7 @@ public class CreateDebtRepositoryImpl implements CreateDebtRepository {
         return database.updateData(debtTable, debtData, "id = ?", ""+debt.getId());
     }
 
-    private boolean updateDebtHeader(Debt debt, Double editPreTotal) {
+    public boolean updateDebtHeader(Debt debt, Double editPreTotal) {
         String debtHeaderTable = debt.isMine()?DatabaseAdapter.DEBT_HEADER_TABLE_TOPAY:
                 DatabaseAdapter.DEBT_HEADER_TABLE_TOCHARGE;
 

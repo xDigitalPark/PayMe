@@ -1,6 +1,7 @@
 package apps.digitakpark.payapp.payments.ui;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -25,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 
 import apps.digitakpark.payapp.PaymeApplication;
+import apps.digitakpark.payapp.create.ui.CreateDebtActivity;
 import apps.digitakpark.payapp.detail.ui.DebtDetailedActivity;
 import apps.digitakpark.payapp.list.DividerItemDecorator;
 import apps.digitakpark.payapp.model.Payment;
@@ -54,13 +57,20 @@ public class PaymentActivity extends AppCompatActivity implements PaymentView {
     RecyclerView recyclerView;
 
     private PaymentAdapter adapter;
+
+    // debt data
     private String currency;
     private String number;
+    private String name;
+    private String concept;
     private Long debtId;
     private boolean mine;
-
-
+    private Double totalDebt;
     private PaymentsPresenter presenter;
+    private Long date;
+    private Long dateLimit;
+
+    public static final int DEBT_UPDATED_RESULT = 0x01;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,18 +109,6 @@ public class PaymentActivity extends AppCompatActivity implements PaymentView {
         LayoutInflater li = LayoutInflater.from(this);
         View promptsView = li.inflate(R.layout.dialog_payment, null);
 
-        final RadioGroup paymentMineRadio = (RadioGroup) promptsView.findViewById(R.id.dialog_payment_radiogroup);
-        RadioButton radioPay = (RadioButton) promptsView.findViewById(R.id.dialog_payment_not_mine);
-        RadioButton radioLend= (RadioButton) promptsView.findViewById(R.id.dialog_payment_mine);
-
-        if(mine) {
-            radioPay.setText(getString(R.string.payment_pagas));
-            radioLend.setText(getString(R.string.payment_te_presta));
-        } else {
-            radioPay.setText(getString(R.string.payment_te_paga));
-            radioLend.setText(getString(R.string.payment_le_prestas));
-        }
-
         final EditText paymentTotal = (EditText) promptsView.findViewById(R.id.dialog_payment_total);
 
         // FIXME: No debe de exceder el monto de la deuda
@@ -118,20 +116,11 @@ public class PaymentActivity extends AppCompatActivity implements PaymentView {
         alertDialogBuilder.setView(promptsView);
         alertDialogBuilder
                 .setCancelable(false)
-                .setTitle("Registrar")
+                .setTitle("Registrar Pago")
                 .setPositiveButton("Guardar",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-                                if(paymentTotal.getText().toString().isEmpty())
-                                    return;
-                                Double amount = Double.parseDouble(paymentTotal.getText().toString());
-                                if (amount <= 0)
-                                    return;
-
-                                boolean lend = false;
-                                lend = (paymentMineRadio
-                                        .getCheckedRadioButtonId() != R.id.dialog_payment_mine);
-                                doPayment(amount, lend);
+                                // do nothing
                             }
                         })
                 .setNegativeButton("Cancelar",
@@ -141,20 +130,50 @@ public class PaymentActivity extends AppCompatActivity implements PaymentView {
                             }
                         });
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button button = ((AlertDialog) alertDialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        if(paymentTotal.getText().toString().isEmpty())
+                            return;
+                        Double amount = Double.parseDouble(paymentTotal.getText().toString());
+                        if (amount <= 0) {
+                            paymentTotal.setError(getString(R.string.create_debt_activity_invalid_total_amount));
+                            return;
+                        }
+
+                        if (amount > totalDebt) {
+                            paymentTotal.setError(getString(R.string.create_debt_activity_unbound_total_amount));
+                            return;
+                        }
+
+                        doPayment(amount);
+                        alertDialog.dismiss();
+                    }
+                });
+            }
+        });
+
         alertDialog.show();
     }
 
     @Override
-    public void doPayment(Double total, boolean lend) {
+    public void doPayment(Double total) {
         Payment payment = new Payment();
         payment.setTotal(total);
         payment.setDate(new Date().getTime());
-        payment.setTotal( (lend?-1:1) * total);
+        payment.setTotal( -1 * total);
         payment.setNumber(number);
         payment.setMine(mine);
         payment.setDebtId(debtId);
-        presenter.sendRegisterPayment(payment);
+        Double newValue = 0d;
+        newValue = totalDebt - total;
+        presenter.sendRegisterPayment(payment, totalDebt, newValue);
     }
 
     @Override
@@ -173,34 +192,51 @@ public class PaymentActivity extends AppCompatActivity implements PaymentView {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_edit_debt) {
-//            onEditDebtOptionSelected();
+            navigateToEditDebt();
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == DEBT_UPDATED_RESULT) {
+            prepopActivity(data.getExtras());
+        }
+    }
+
+    private void navigateToEditDebt() {
+        Intent intent = new Intent(getApplicationContext(), CreateDebtActivity.class);
+        intent.putExtra("debt_id", debtId);
+        intent.putExtra("debt_mine", mine);
+        intent.putExtra("debt_number", number);
+        intent.putExtra("debt_name", name);
+        intent.putExtra("debt_edit", true);
+        intent.putExtra("debt_total", totalDebt);
+        intent.putExtra("debt_concept", concept);
+        intent.putExtra("debt_date", date);
+        intent.putExtra("debt_limit", dateLimit);
+        intent.putExtra("from_payments", true);
+        startActivityForResult(intent, DEBT_UPDATED_RESULT);
+
+    }
 
     @Override
     public void prepopActivity(Bundle extras) {
 
-        setTitle(extras.getString(DebtDetailedActivity.DEBT_CONCEPT));
-        String name = extras.getString(DebtDetailedActivity.DEBT_NAME);
-        String dateFmt = PaymeApplication.getFormatters().formatDate(extras.getLong(DebtDetailedActivity.DEBT_DATE));
-        String totalFmt = PaymeApplication.getFormatters().formatMoney(extras.getDouble(DebtDetailedActivity.DEBT_TOTAL));
+        // concept
+        concept = extras.getString(DebtDetailedActivity.DEBT_CONCEPT);
+        setTitle(concept);
 
-        debtId = extras.getLong(DebtDetailedActivity.DEBT_ID);
+        // date
+        date = extras.getLong(DebtDetailedActivity.DEBT_DATE);
+        String dateFmt = PaymeApplication.getFormatters().formatDate(date);
+        paymentActivityItemDateText.setText(dateFmt);
+
+        // total
+        totalDebt = extras.getDouble(DebtDetailedActivity.DEBT_TOTAL);
+        String totalFmt = PaymeApplication.getFormatters().formatMoney(totalDebt);
         currency = extras.getString(DebtDetailedActivity.DEBT_CURRENCY);
-        number = extras.getString(DebtDetailedActivity.DEBT_NUMBER);
-
-        paymentActivityConceptEdittext.setText(name);
         paymentActivityTotalEdittext.setText(currency + " " + totalFmt);
-
-        Long dateLimit = extras.getLong(DebtDetailedActivity.DEBT_LIMIT);
-        if (dateLimit != null & dateLimit > 0) {
-            String limitFmt = PaymeApplication.getFormatters().formatDate(dateLimit);
-            paymentActivityItemDateLimitText.setText(limitFmt);
-            paymentActivityItemDateText.setText(dateFmt);
-        }
-
         mine = extras.getBoolean(DebtDetailedActivity.DEBT_MINE);
         if (mine) {
             paymentActivityTotalEdittext.setTextColor(getResources().getColor(R.color.negativeDebt));
@@ -208,12 +244,27 @@ public class PaymentActivity extends AppCompatActivity implements PaymentView {
             paymentActivityTotalEdittext.setTextColor(getResources().getColor(R.color.positiveDebt));
         }
 
-        if (dateLimit != null && dateLimit != 0) {
+        // limit
+        dateLimit = extras.getLong(DebtDetailedActivity.DEBT_LIMIT);
+        if (dateLimit != null & dateLimit > 0) {
             String limitFmt = PaymeApplication.getFormatters().formatDate(dateLimit);
             paymentActivityItemDateLimitText.setText(limitFmt);
             paymentActivityItemDateLimitText.setVisibility(View.VISIBLE);
             activityDebtDetailItemDateLimitIcon.setVisibility(View.VISIBLE);
+        } else {
+            paymentActivityItemDateLimitText.setVisibility(View.GONE);
+            activityDebtDetailItemDateLimitIcon.setVisibility(View.GONE);
         }
+
+        if (extras.containsKey("from_payments")) return;
+
+        debtId = extras.getLong(DebtDetailedActivity.DEBT_ID);
+        number = extras.getString(DebtDetailedActivity.DEBT_NUMBER);
+
+        // name
+        name = extras.getString(DebtDetailedActivity.DEBT_NAME);
+        paymentActivityConceptEdittext.setText(name);
+
     }
 
     @Override
@@ -221,8 +272,13 @@ public class PaymentActivity extends AppCompatActivity implements PaymentView {
         this.adapter.changeDataSet(paymentList);
     }
 
+
     @Override
-    public void onPaymentCreated() {
+    public void onPaymentCreated(Double amount) {
+        adapter.changeDataSet(new ArrayList<Payment>());
         presenter.sendRetrievePaymentsAction(number, mine, debtId);
+        totalDebt +=  amount;
+        String totalFmt = PaymeApplication.getFormatters().formatMoney(totalDebt);
+        paymentActivityTotalEdittext.setText(currency + " " + totalFmt);
     }
 }

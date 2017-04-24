@@ -20,6 +20,7 @@
     <string name="activity_create_debt_select_contact_title">Contacto:</string>
     <string name="create_debt_activity_invalid_contact_selection">Contacto no valido. Seleccione uno que tenga celular.</string>
     <string name="create_debt_activity_invalid_total_amount">Invalid total value</string>
+    <string name="create_debt_activity_unbound_total_amount">El monto supera la deuda</string>
     <string name="create_debt_activity_invalid_concept">Invalid Concept value.</string>
     <string name="fragment_list_close_debt">Liquidar Deuda</string>
     <string name="fragment_list_edit_debt">Modificar Deuda</string>
@@ -58,10 +59,10 @@
     <string name="title_activity_debt_detail">DebtDetailActivity</string>
     <string name="title_activity_item_detail">ItemDetailActivity</string>
     <string name="title_activity_payment">Historial de Pagos</string>
-    <string name="payment_te_presta">TE PRESTA</string>
-    <string name="payment_pagas">PAGAS</string>
-    <string name="payment_le_prestas">LE PRESTAS</string>
-    <string name="payment_te_paga">TE PAGA</string>
+    <string name="payment_te_presta">ME PRESTA</string>
+    <string name="payment_pagas">PAGO</string>
+    <string name="payment_le_prestas">LE PRESTO</string>
+    <string name="payment_te_paga">ME PAGA</string>
 
     <!--<string-array name="pref_sync_frequency_values">-->
     <!--<item>15</item>-->

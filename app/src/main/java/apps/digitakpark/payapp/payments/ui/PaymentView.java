@@ -10,6 +10,6 @@ import apps.digitakpark.payapp.model.Payment;
 public interface PaymentView {
     void prepopActivity(Bundle extras);
     void onLoadPaymentList(List<Payment> paymentList);
-    void doPayment(Double total, boolean mine);
-    void onPaymentCreated();
+    void doPayment(Double total);
+    void onPaymentCreated(Double total);
 }

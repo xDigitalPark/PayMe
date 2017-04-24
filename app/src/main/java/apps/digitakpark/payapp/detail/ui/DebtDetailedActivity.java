@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import apps.digitakpark.payapp.PaymeApplication;
 import apps.digitakpark.payapp.create.ui.CreateDebtActivity;
 import apps.digitakpark.payapp.detail.DebtDetailPresenter;
 import apps.digitakpark.payapp.detail.DebtDetailPresenterImpl;
@@ -189,8 +190,8 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
     public void onLoadTotal(Double total) {
         String title = mine?getString(R.string.activity_debt_detailed_ledebo):
                 getString(R.string.activity_debt_detailed_medebe);
-
-        activityDebtDetailedTotal.setText(title + "   |   S/. " + total);
+        String totalFmt = PaymeApplication.getFormatters().formatMoney(total);
+        activityDebtDetailedTotal.setText(title + "   |   S/. " + totalFmt);
     }
 
     @Override

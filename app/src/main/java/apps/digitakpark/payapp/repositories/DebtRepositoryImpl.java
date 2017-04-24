@@ -38,7 +38,12 @@ public class DebtRepositoryImpl implements DebtRepository {
             balanceUpdated = true; // TODO UPDATE BALANCE
         if(debtHeaderDeleted==true && removeChilds == true) {
             String debtTable = !debtHeader.isMine()?DatabaseAdapter.DEBT_TABLE_TOCHARGE:DatabaseAdapter.DEBT_TABLE_TOPAY;
-            String query = "DELETE FROM " + debtTable + " WHERE number = '" + debtHeader.getNumber() + "'";
+            // delete payments
+            String query = "DELETE FROM " + DatabaseAdapter.PAYMENTS_TABLE + " WHERE number = '" + debtHeader.getNumber() + "' AND " +
+                    "mine=" + (debtHeader.isMine()?1:0);
+            database.executeSQL(query);
+            // delete debts
+            query = "DELETE FROM " + debtTable + " WHERE number = '" + debtHeader.getNumber() + "'";
             database.executeSQL(query);
             int count = database.countData(debtTable, "number = '" + debtHeader.getNumber() + "'");
             childsDeleted = (count == 0);

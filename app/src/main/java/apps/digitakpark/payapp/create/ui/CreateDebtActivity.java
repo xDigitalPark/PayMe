@@ -36,10 +36,12 @@ import apps.digitakpark.payapp.PaymeApplication;
 import apps.digitakpark.payapp.create.CreateDebtPresenter;
 import apps.digitakpark.payapp.create.CreateDebtPresenterImpl;
 import apps.digitakpark.payapp.create.adapters.ContactsArrayAdapter;
+import apps.digitakpark.payapp.detail.ui.DebtDetailedActivity;
 import apps.digitakpark.payapp.events.CreateDebtEvent;
 import apps.digitakpark.payapp.model.Contact;
 import apps.digitakpark.payapp.model.Debt;
 import apps.digitakpark.payapp.model.DebtHeader;
+import apps.digitakpark.payapp.payments.ui.PaymentActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -88,6 +90,8 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
     final Calendar myLimitCalendar = Calendar.getInstance();
     DatePickerDialog.OnDateSetListener datePickerListener;
     DatePickerDialog.OnDateSetListener limiteDatePickerListener;
+
+    private boolean fromPayments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,6 +209,10 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
             this.activityCreateDebtTotal.setText(totalFmt);
             this.activityCreateDebtConcept.setText(concept);
         }
+
+        if (extras.containsKey("from_payments")) {
+            fromPayments = true;
+        }
     }
 
     @Override
@@ -213,7 +221,7 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
         activityCreateDebtMine.setEnabled(false);
         activityCreateDebtNotMine.setEnabled(false);
         activityCreateDebtSearchContact.setVisibility(View.GONE);
-
+        activityCreateDebtTotal.setEnabled(false);
     }
 
     @Override
@@ -312,7 +320,6 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
 
     @Override
     public void onDebtCreated(CreateDebtEvent event) {
-//        showMessage(event.getMessage());
         finish();
     }
 
@@ -450,6 +457,17 @@ public class CreateDebtActivity extends AppCompatActivity implements CreateDebtV
 
     @Override
     public void onDebtUpdated() {
+        if (fromPayments) {
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra(DebtDetailedActivity.DEBT_CONCEPT , debt.getConcept());
+            returnIntent.putExtra(DebtDetailedActivity.DEBT_TOTAL , debt.getTotal());
+            returnIntent.putExtra(DebtDetailedActivity.DEBT_DATE , debt.getDate());
+            returnIntent.putExtra(DebtDetailedActivity.DEBT_LIMIT , debt.getLimit());
+            returnIntent.putExtra(DebtDetailedActivity.DEBT_MINE , debt.isMine());
+            returnIntent.putExtra(DebtDetailedActivity.DEBT_CURRENCY , debt.getCurrency());
+            returnIntent.putExtra("from_payments", true);
+            setResult(PaymentActivity.DEBT_UPDATED_RESULT, returnIntent);
+        }
         finish();
     }
 }

@@ -11,5 +11,5 @@ public interface PaymentsPresenter {
     void onDestroy();
     void sendRetrievePaymentsAction(String number, boolean mine, Long debtId);
     void receiveEvent(PaymentEvent event);
-    void sendRegisterPayment(Payment payment);
+    void sendRegisterPayment(Payment payment, Double currentTotal, Double newTotal);
 }

@@ -43,28 +43,19 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentViewHolder> {
 
 
         if (mine) {
-            if (payment.getTotal() > 0) {
-
-                holder.totalEditText.setTextColor(holder.view.getResources().getColor(R.color.negativeDebt));
-                holder.transactionEditText.setText(R.string.payment_te_presta);
-                holder.transactionEditText.setTextColor(holder.view.getResources().getColor(R.color.negativeDebt));
-                holder.dateEditText.setTextColor(holder.view.getResources().getColor(R.color.negativeDebt));
-            } else {
-                holder.transactionEditText.setText(R.string.payment_pagas);
-            }
+            holder.transactionEditText.setText(R.string.payment_pagas);
         } else {
-            if (payment.getTotal() > 0) {
-                holder.totalEditText.setTextColor(holder.view.getResources().getColor(R.color.negativeDebt));
-                holder.transactionEditText.setText(R.string.payment_le_prestas);
-                holder.transactionEditText.setTextColor(holder.view.getResources().getColor(R.color.negativeDebt));
-                holder.dateEditText.setTextColor(holder.view.getResources().getColor(R.color.negativeDebt));
-            } else {
-                holder.transactionEditText.setText(R.string.payment_te_paga);
-            }
+            holder.transactionEditText.setText(R.string.payment_te_paga);
+
         }
+    }
 
-
-
+    public Double getTotal() {
+        Double total = 0D;
+        for(Payment payment: this.paymentList) {
+            total += payment.getTotal();
+        }
+        return total;
     }
 
     @Override
