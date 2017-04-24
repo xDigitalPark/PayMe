@@ -31,11 +31,12 @@ public class DebtRepositoryImpl implements DebtRepository {
     }
 
     @Override
-    public void deleteDebtHeader(DebtHeader debtHeader, boolean removeChilds, boolean pushEvent) {
+    public void deleteDebtHeader(DebtHeader debtHeader, boolean removeChilds, boolean pushEvent, boolean fromInterface) {
+
         String table = !debtHeader.isMine()?DatabaseAdapter.DEBT_HEADER_TABLE_TOCHARGE:DatabaseAdapter.DEBT_HEADER_TABLE_TOPAY;
         boolean debtHeaderDeleted = this.database.deleteData(table, "number = ?", debtHeader.getNumber()),
-            childsDeleted = true,
-            balanceUpdated = true; // TODO UPDATE BALANCE
+                childsDeleted = true,
+                balanceUpdated = true; // TODO UPDATE BALANCE
         if(debtHeaderDeleted==true && removeChilds == true) {
             String debtTable = !debtHeader.isMine()?DatabaseAdapter.DEBT_TABLE_TOCHARGE:DatabaseAdapter.DEBT_TABLE_TOPAY;
             // delete payments
@@ -43,6 +44,9 @@ public class DebtRepositoryImpl implements DebtRepository {
                     "mine=" + (debtHeader.isMine()?1:0);
             database.executeSQL(query);
             // delete debts
+
+            database.deleteData(DatabaseAdapter.PAYMENTS_TABLE, "number = ? AND mine = ?", new String[] {debtHeader.getNumber(), ""+(debtHeader.isMine()?"1":"0") });
+
             query = "DELETE FROM " + debtTable + " WHERE number = '" + debtHeader.getNumber() + "'";
             database.executeSQL(query);
             int count = database.countData(debtTable, "number = '" + debtHeader.getNumber() + "'");
@@ -52,7 +56,8 @@ public class DebtRepositoryImpl implements DebtRepository {
             }
         }
 
-        if (removeChilds == false && debtHeaderDeleted == true && pushEvent == true) {
+
+        if ((removeChilds == false && debtHeaderDeleted == true && pushEvent == true) || fromInterface == true) {
             DebtDetailEvent event = new DebtDetailEvent();
             event.setStatus(DebtDetailEvent.DEBT_HEADER_DELETED_OK);
             event.setMessage("OK");
@@ -74,6 +79,11 @@ public class DebtRepositoryImpl implements DebtRepository {
             }
 
         }
+    }
+
+    @Override
+    public void deleteDebtHeader(DebtHeader debtHeader, boolean removeChilds, boolean pushEvent) {
+        this.deleteDebtHeader(debtHeader, removeChilds, pushEvent, false);
     }
 
     private boolean updateBalanceInDeleteDebtHeaderAction(DebtHeader debtHeader, boolean pushEvent) {

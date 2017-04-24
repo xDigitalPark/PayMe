@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_debt_detail_link"
-        android:icon="@android:drawable/ic_menu_myplaces"
+        android:id="@+id/action_debt_liquidar"
+        android:icon="@drawable/done"
         app:showAsAction="ifRoom"
         android:title="@string/activity_debt_detail_link_menu_title" />
     <item

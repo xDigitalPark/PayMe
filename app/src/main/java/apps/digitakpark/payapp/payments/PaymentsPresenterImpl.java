@@ -4,6 +4,7 @@ import org.greenrobot.eventbus.Subscribe;
 import apps.digitakpark.payapp.events.PaymentEvent;
 import apps.digitakpark.payapp.lib.events.EventBus;
 import apps.digitakpark.payapp.lib.events.GreenRobotEventBus;
+import apps.digitakpark.payapp.model.DebtHeader;
 import apps.digitakpark.payapp.model.Payment;
 import apps.digitakpark.payapp.payments.ui.PaymentView;
 
@@ -52,5 +53,10 @@ public class PaymentsPresenterImpl implements PaymentsPresenter {
     @Override
     public void sendRegisterPayment(Payment payment, Double currentTotal, Double newTotal) {
         iteractor.doRegisterPayment(payment, currentTotal, newTotal);
+    }
+
+    @Override
+    public void sendCloseDebt(DebtHeader debtHeader) {
+        iteractor.doCloseDebt(debtHeader);
     }
 }

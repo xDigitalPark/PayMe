@@ -16,6 +16,7 @@ import java.util.List;
 
 import apps.digitakpark.payapp.PaymeApplication;
 import apps.digitakpark.payapp.balance.BalancePresenter;
+import apps.digitakpark.payapp.balance.BalancePresenterImpl;
 import apps.digitakpark.payapp.balance.adapters.BalanceFragmentAdapter;
 import apps.digitakpark.payapp.balance.listeners.OnTabSelectedListener;
 import apps.digitakpark.payapp.list.DividerItemDecorator;
@@ -23,7 +24,6 @@ import apps.digitakpark.payapp.model.Balance;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import payme.pe.apps.digitakpark.payme.R;
-import apps.digitakpark.payapp.balance.BalancePresenterImpl;
 
 public class BalanceFragment extends Fragment implements BalanceView, OnTabSelectedListener {
 
@@ -32,6 +32,8 @@ public class BalanceFragment extends Fragment implements BalanceView, OnTabSelec
     BalanceFragmentAdapter adapter;
     @BindView(R.id.fragment_balance_detail_total)
     TextView fragmentBalanceDetailTotal;
+    @BindView(R.id.payments_empty_view)
+    TextView paymentsEmptyView;
     private List<Balance> balanceList = new ArrayList<>();
     private BalancePresenter presenter;
 
@@ -82,6 +84,14 @@ public class BalanceFragment extends Fragment implements BalanceView, OnTabSelec
             fragmentBalanceDetailTotal.setTextColor(getResources().getColor(R.color.negativeDebt));
         else
             fragmentBalanceDetailTotal.setTextColor(getResources().getColor(R.color.positiveDebt));
+
+        if (total == 0) {
+            paymentsEmptyView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            paymentsEmptyView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
 
     }
 

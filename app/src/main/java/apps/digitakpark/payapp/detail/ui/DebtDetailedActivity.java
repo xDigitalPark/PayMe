@@ -68,6 +68,7 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
     private boolean mine;
     List<Debt> debtList = new ArrayList<>();
     private DebtDetailPresenter presenter;
+    private Double debtTotal;
     DebtDetailActivityAdapter adapter;
 
     @Override
@@ -111,10 +112,11 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_debt_detail_call) {
             callToNumber(this.debt.getNumber());
-        } else if(item.getItemId() == R.id.action_debt_detail_link) {
-            showPickContactActivity();
-        } else if(item.getItemId() == R.id.action_debt_detail_share) {
+        }  else if(item.getItemId() == R.id.action_debt_detail_share) {
             showShareAction();
+        }
+        else if(item.getItemId() == R.id.action_debt_liquidar) {
+            closeDebt();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -184,6 +186,7 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
     @Override
     public void onLoadDebtList(List<Debt> debtList) {
         this.adapter.changeDataSet(debtList);
+        debtTotal = this.adapter.getTotal();
     }
 
     @Override
@@ -309,17 +312,20 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
     }
 
     @Override
-    public void showPickContactActivity() {
+    public void closeDebt() {
         // Show alert before transfer
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this);
-        builder.setTitle("Transferir Cuenta?");
-        builder.setMessage("Transfiere esta cuenta a otro contacto.");
-        builder.setPositiveButton("Transferir", new DialogInterface.OnClickListener() {
+        builder.setTitle("Liquidar Deuda");
+        builder.setMessage("Desea liquidar la deuda?");
+        builder.setPositiveButton("Liquidar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                startActivityForResult(intent, PICK_CONTACT_TO_LINK);
+            DebtHeader debtHeader = new DebtHeader();
+            debtHeader.setNumber(number);
+            debtHeader.setMine(mine);
+                debtHeader.setTotal(debtTotal);
+            presenter.sendDeleteDetHeaderAction(debtHeader);
             }
         });
         builder.setNegativeButton("Cancelar", null);

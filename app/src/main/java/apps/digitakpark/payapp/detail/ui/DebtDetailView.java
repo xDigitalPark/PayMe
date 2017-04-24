@@ -27,7 +27,7 @@ public interface DebtDetailView {
     void onDebtHeaderDeleted();
     void callToNumber(String number);
     void onPickedContact(Uri contactData);
-    void showPickContactActivity();
+    void closeDebt();
     void updateContactInfo(Map<String, String> data);
     void showMessage(String message);
 

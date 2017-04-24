@@ -82,7 +82,7 @@ public class LocalDatabaseAdapterImpl  extends SQLiteOpenHelper implements Datab
     @Override
     public boolean deleteData(String table, String clause, String[] values) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(table, clause, values) != 0;
+        return db.delete(table, clause, values) != -1;
     }
 
     @Override

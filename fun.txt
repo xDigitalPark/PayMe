@@ -1,8 +1,10 @@
 add INITIAL LOAN IN THE LOG
 
-1. Actualizar Debt, header, y balance
-3. Editar payment option.
-
+1. Multimoneda
+3. Editar payment option en Debt.
+4. Mejorar Pantalla de Password.
+5. Registro con Email.
+6. Usuarios / Map / resumen
 
 
 
