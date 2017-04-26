@@ -195,6 +195,13 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
                 getString(R.string.activity_debt_detailed_medebe);
         String totalFmt = PaymeApplication.getFormatters().formatMoney(total);
         activityDebtDetailedTotal.setText(title + "   |   S/. " + totalFmt);
+        if (total == 0) {
+            DebtHeader debtHeader = new DebtHeader();
+            debtHeader.setNumber(debt.getNumber());
+            debtHeader.setMine(debt.isMine());
+            debtHeader.setTotal(0D);
+            presenter.sendDeleteDetHeaderAction(debtHeader);
+        }
     }
 
     @Override
@@ -317,7 +324,7 @@ public class DebtDetailedActivity extends AppCompatActivity implements DebtDetai
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this);
         builder.setTitle("Liquidar Deuda");
-        builder.setMessage("Desea liquidar la deuda?");
+        builder.setMessage("Desea liquidar todas las deudas?");
         builder.setPositiveButton("Liquidar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

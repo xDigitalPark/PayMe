@@ -26,6 +26,8 @@ import apps.digitakpark.payapp.PaymeApplication;
 import apps.digitakpark.payapp.create.ui.CreateDebtActivity;
 import apps.digitakpark.payapp.detail.ui.DebtDetailedActivity;
 import apps.digitakpark.payapp.list.DividerItemDecorator;
+import apps.digitakpark.payapp.model.Debt;
+import apps.digitakpark.payapp.model.DebtHeader;
 import apps.digitakpark.payapp.model.Payment;
 import apps.digitakpark.payapp.payments.PaymentsPresenter;
 import apps.digitakpark.payapp.payments.PaymentsPresenterImpl;
@@ -91,6 +93,11 @@ public class PaymentActivity extends AppCompatActivity implements PaymentView {
 
         this.presenter = new PaymentsPresenterImpl(this);
         presenter.onCreate();
+    }
+
+    @Override
+    public void onDebtDeteled() {
+        finish();
     }
 
     @Override
@@ -189,6 +196,8 @@ public class PaymentActivity extends AppCompatActivity implements PaymentView {
         int id = item.getItemId();
         if (id == R.id.action_edit_debt) {
             navigateToEditDebt();
+        } else if (id == R.id.action_done_debt) {
+            closeDebt();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -201,6 +210,27 @@ public class PaymentActivity extends AppCompatActivity implements PaymentView {
         }
     }
 
+    private void closeDebt() {
+        // Show alert before transfer
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(this);
+        builder.setTitle("Liquidar Deuda");
+        builder.setMessage("Desea liquidar la deuda?");
+        builder.setPositiveButton("Liquidar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Debt debt = new Debt();
+                debt.setNumber(number);
+                debt.setId(debtId);
+                debt.setTotal(totalDebt);
+                debt.setMine(mine);
+
+                presenter.sendDeleteDebtAction(debt);
+            }
+        });
+        builder.setNegativeButton("Cancelar", null);
+        builder.show();
+    }
     private void navigateToEditDebt() {
         Intent intent = new Intent(getApplicationContext(), CreateDebtActivity.class);
         intent.putExtra("debt_id", debtId);

@@ -1,7 +1,10 @@
 package apps.digitakpark.payapp.payments;
 
+import apps.digitakpark.payapp.model.Debt;
 import apps.digitakpark.payapp.model.DebtHeader;
 import apps.digitakpark.payapp.model.Payment;
+import apps.digitakpark.payapp.repositories.DebtDetailRepositoryImpl;
+import apps.digitakpark.payapp.repositories.DebtDetailRespository;
 import apps.digitakpark.payapp.repositories.DebtRepository;
 import apps.digitakpark.payapp.repositories.DebtRepositoryImpl;
 import apps.digitakpark.payapp.repositories.PaymentRepository;
@@ -11,10 +14,12 @@ class PaymentIteractorImpl implements PaymentIteractor {
 
     private PaymentRepository repository;
     private DebtRepository debtRepository;
+    private DebtDetailRespository debtDetailRespository;
 
     public PaymentIteractorImpl() {
         this.repository = new PaymentRepositoryImpl();
         this.debtRepository = new DebtRepositoryImpl();
+        this.debtDetailRespository = new DebtDetailRepositoryImpl();
     }
 
     @Override
@@ -28,7 +33,12 @@ class PaymentIteractorImpl implements PaymentIteractor {
     }
 
     @Override
-    public void doCloseDebt(DebtHeader debtHeader) {
+    public void doCloseDebtHeader(Debt debt) {
+        this.debtDetailRespository.deleteDebt(debt, true);
+    }
+
+    @Override
+    public void doCloseDebtHeader(DebtHeader debtHeader) {
         this.debtRepository.deleteDebtHeader(debtHeader, true, true, true);
     }
 }

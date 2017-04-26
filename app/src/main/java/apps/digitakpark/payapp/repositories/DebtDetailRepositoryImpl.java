@@ -8,12 +8,14 @@ import java.util.List;
 
 import apps.digitakpark.payapp.PaymeApplication;
 import apps.digitakpark.payapp.events.DebtDetailEvent;
+import apps.digitakpark.payapp.events.PaymentEvent;
 import apps.digitakpark.payapp.lib.data.DatabaseAdapter;
 import apps.digitakpark.payapp.lib.events.EventBus;
 import apps.digitakpark.payapp.lib.events.GreenRobotEventBus;
 import apps.digitakpark.payapp.model.Balance;
 import apps.digitakpark.payapp.model.Debt;
 import apps.digitakpark.payapp.model.DebtHeader;
+import apps.digitakpark.payapp.model.Payment;
 
 public class DebtDetailRepositoryImpl implements DebtDetailRespository {
 
@@ -63,6 +65,11 @@ public class DebtDetailRepositoryImpl implements DebtDetailRespository {
 
     @Override
     public void deleteDebt(Debt debt) {
+        this.deleteDebt(debt, false);
+    }
+
+    @Override
+    public void deleteDebt(Debt debt, boolean fromPayment) {
         String table = !debt.isMine()?DatabaseAdapter.DEBT_TABLE_TOCHARGE:DatabaseAdapter.DEBT_TABLE_TOPAY;
         int mine = debt.isMine()?1:0;
         boolean debtDeleted = database.deleteData(table, "id = ?", debt.getId().toString()),
@@ -71,8 +78,18 @@ public class DebtDetailRepositoryImpl implements DebtDetailRespository {
                 balanceUpdated = updateBalance(debt);
 
         if (debtDeleted && debtHeaderUpdated && balanceUpdated && paymentsDeleted) {
-            Balance balance = debtLookupRepository.lookupBalance(debt.getNumber());
-            sendEvent(debt.getId());
+            if (!fromPayment) {
+                DebtDetailEvent event = new DebtDetailEvent();
+                event.setStatus(DebtDetailEvent.DEBT_DELETED_OK);
+                event.setMessage("OK");
+                event.setDebtId(debt.getId());
+                eventBus.post(event);
+            } else {
+                PaymentEvent event = new PaymentEvent();
+                event.setStatus(PaymentEvent.DEBT_DELETE_OK);
+                event.setMessage("OK");
+                eventBus.post(event);
+            }
         } else {
             // TODO: send Errors
         }

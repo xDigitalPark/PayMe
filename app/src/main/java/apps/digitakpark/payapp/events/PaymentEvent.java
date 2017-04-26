@@ -10,6 +10,7 @@ public class PaymentEvent {
 
     public static final short PAYMENT_LIST_OK = 0x01;
     public static final short PAYMENT_CREATED_OK = 0x02;
+    public static final short DEBT_DELETE_OK = 0x03;
 
     private short status;
     private List<Payment> paymentList;

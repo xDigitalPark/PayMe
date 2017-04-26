@@ -4,6 +4,7 @@ import org.greenrobot.eventbus.Subscribe;
 import apps.digitakpark.payapp.events.PaymentEvent;
 import apps.digitakpark.payapp.lib.events.EventBus;
 import apps.digitakpark.payapp.lib.events.GreenRobotEventBus;
+import apps.digitakpark.payapp.model.Debt;
 import apps.digitakpark.payapp.model.DebtHeader;
 import apps.digitakpark.payapp.model.Payment;
 import apps.digitakpark.payapp.payments.ui.PaymentView;
@@ -47,6 +48,9 @@ public class PaymentsPresenterImpl implements PaymentsPresenter {
             case PaymentEvent.PAYMENT_CREATED_OK:
                 view.onPaymentCreated(event.getTotal());
                 break;
+            case PaymentEvent.DEBT_DELETE_OK:
+                view.onDebtDeteled();
+                break;
         }
     }
 
@@ -56,7 +60,12 @@ public class PaymentsPresenterImpl implements PaymentsPresenter {
     }
 
     @Override
+    public void sendDeleteDebtAction(Debt debt) {
+        iteractor.doCloseDebtHeader(debt);
+    }
+
+    @Override
     public void sendCloseDebt(DebtHeader debtHeader) {
-        iteractor.doCloseDebt(debtHeader);
+        iteractor.doCloseDebtHeader(debtHeader);
     }
 }

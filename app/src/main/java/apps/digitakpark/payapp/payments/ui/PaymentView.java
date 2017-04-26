@@ -12,4 +12,5 @@ public interface PaymentView {
     void onLoadPaymentList(List<Payment> paymentList);
     void doPayment(Double total);
     void onPaymentCreated(Double total);
+    void onDebtDeteled();
 }
